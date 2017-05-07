@@ -1,0 +1,747 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/bitbug_favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="集成学习 –&amp;gt; 提升方法在分类问题中，提升（boosting）方法通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类的性能。 论述安排先介绍提升方法的基本思路和代表性的提升算法AdaBoost；再叙述提升算法更加具体的实例——提升树（boosting tree）；最后讲述梯度提升（Gradient boosting）,是XGBoost的主要实现算法。 提升算法的基">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提升方法（boost）解决分类问题(2)">
+<meta property="og:url" content="http://yoursite.com/2017/05/07/boost_method2solve_classify(2)/index.html">
+<meta property="og:site_name" content="A Blog For Real">
+<meta property="og:description" content="集成学习 –&amp;gt; 提升方法在分类问题中，提升（boosting）方法通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类的性能。 论述安排先介绍提升方法的基本思路和代表性的提升算法AdaBoost；再叙述提升算法更加具体的实例——提升树（boosting tree）；最后讲述梯度提升（Gradient boosting）,是XGBoost的主要实现算法。 提升算法的基">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1494153340970&di=6be1478c201d45085e5196b9df21f784&imgtype=0&src=http%3A%2F%2Fwww.36dsj.com%2Fwp-content%2Fuploads%2F2015%2F08%2F1-4.png">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/ecff5bealy1ffctck5t3mj20nm03ojrs.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/ecff5bealy1ffcsz7afo3j20fq06nmxe.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/ecff5bealy1ffcttrxy9dj209i0333yi.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/ecff5bealy1ffcv4xvulqj20ry0kowgy.jpg">
+<meta property="og:updated_time" content="2017-05-07T08:26:12.526Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="提升方法（boost）解决分类问题(2)">
+<meta name="twitter:description" content="集成学习 –&amp;gt; 提升方法在分类问题中，提升（boosting）方法通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类的性能。 论述安排先介绍提升方法的基本思路和代表性的提升算法AdaBoost；再叙述提升算法更加具体的实例——提升树（boosting tree）；最后讲述梯度提升（Gradient boosting）,是XGBoost的主要实现算法。 提升算法的基">
+<meta name="twitter:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1494153340970&di=6be1478c201d45085e5196b9df21f784&imgtype=0&src=http%3A%2F%2Fwww.36dsj.com%2Fwp-content%2Fuploads%2F2015%2F08%2F1-4.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/07/boost_method2solve_classify(2)/"/>
+
+
+
+
+
+  <title> 提升方法（boost）解决分类问题(2) | A Blog For Real </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Blog For Real</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Do one thing at a time, and do well.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/07/boost_method2solve_classify(2)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                提升方法（boost）解决分类问题(2)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-07T16:26:12+08:00">
+                2017-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1494153340970&amp;di=6be1478c201d45085e5196b9df21f784&amp;imgtype=0&amp;src=http%3A%2F%2Fwww.36dsj.com%2Fwp-content%2Fuploads%2F2015%2F08%2F1-4.png" alt=""></p>
+<h3 id="集成学习-–-gt-提升方法"><a href="#集成学习-–-gt-提升方法" class="headerlink" title="集成学习 –&gt; 提升方法"></a>集成学习 –&gt; 提升方法</h3><p>在分类问题中，提升（boosting）方法通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类的性能。</p>
+<h3 id="论述安排"><a href="#论述安排" class="headerlink" title="论述安排"></a>论述安排</h3><p>先介绍提升方法的基本思路和代表性的提升算法AdaBoost；再叙述提升算法更加具体的实例——提升树（boosting tree）；最后讲述梯度提升（Gradient boosting）,是XGBoost的主要实现算法。</p>
+<h3 id="提升算法的基本思路"><a href="#提升算法的基本思路" class="headerlink" title="提升算法的基本思路"></a>提升算法的基本思路</h3><p>“三个臭皮匠顶个诸葛亮”</p>
+<ul>
+<li>强可学习(strongly learnable):一个概念存在一个多项式的学习算法可以学习它，并且正确率很高。</li>
+<li>弱可学习(weakly learnable):…….，并且正确率仅比随机猜测略好。</li>
+</ul>
+<p>强可学习和弱可学习是等价的，提升算法是如何将“弱学习算法”提升为“强学习算法”。</p>
+<p>提升方法回答了两个问题：</p>
+<ul>
+<li>每一轮如何改变训练数据的权值或概率分布：</li>
+</ul>
+<p>AdaBoost的做法是，提高那些被前一轮弱分类器错误分类样本的权值，而降低那些正确分类样本的权值，从而使得弱分类器得到更大关注。</p>
+<ul>
+<li>如何将弱分类器组合成一个强分类器：</li>
+</ul>
+<p>即弱分类器的组合，AdaBoost采用加权多数表决的方法，具体的就是，加大分类误差率小的弱分类器的权值，使其表决中起更大作用，减少分类误差率大的弱分类器的权值，使其在表决中起较小作用。</p>
+<p>AdaBoost的算法过程在这里就不给出了，AdaBoost算法的训练误差分析证明了每次迭代可以减少它在训练误数据集上的分类误差率。</p>
+<p>AdaBoost算法的特点：</p>
+<p>1）不改变所给的训练数据，而不断改变训练数据权值的分布，使得训练数据在基本分类器的学习中起到了不同的作用。</p>
+<p>2）利用基本分类器的线性组合构建最终分类器(加法模型)</p>
+<p>与早期的提升算法不同，AdaBoost具有适应性，即它能适应弱分类器各自的训练误差率。这也是Ada名字的由来，即Adaptive</p>
+<p>可以认为AdaBoost算法是模型为<strong>加法模型</strong>，损失函数为<strong>指数函数</strong>，学习算法是<strong>前向分步算法时的二类分类学习方法</strong>。</p>
+<p><strong>求解加法模型优化问题的算法</strong></p>
+<p>—— 前向分步算法(forward stagewise algorithm)</p>
+<h3 id="提升树-被认为是统计学习中性能最好的方法之一"><a href="#提升树-被认为是统计学习中性能最好的方法之一" class="headerlink" title="提升树(被认为是统计学习中性能最好的方法之一)"></a>提升树(被认为是统计学习中性能最好的方法之一)</h3><p>提升树是以分类树或回归树为基本分类器的提升方法。</p>
+<p>提升树模型可以表示为决策树的加法模型，公式如下：</p>
+<p><img src="http://wx4.sinaimg.cn/mw690/ecff5bealy1ffctck5t3mj20nm03ojrs.jpg" alt=""></p>
+<p>以决策树为基函数的提升方法称为提升树(boosting tree)</p>
+<ul>
+<li>分类问题：决策树是二叉分类树</li>
+<li>回归问题：决策树是二叉回归树</li>
+</ul>
+<p>对于不同问题，提升树用的损失函数不同，如下所示：</p>
+<p><img src="http://wx4.sinaimg.cn/mw690/ecff5bealy1ffcsz7afo3j20fq06nmxe.jpg" alt=""></p>
+<h3 id="梯度提升-Gradient-boosting"><a href="#梯度提升-Gradient-boosting" class="headerlink" title="梯度提升(Gradient boosting)"></a>梯度提升(Gradient boosting)</h3><p>当损失函数是平方损失和指数损失的时候，每一步优化是很简单的，但对于一般损失函数来说，往往每一步优化很困难，梯度提升就是来解决一般损失函数的优化问题的。</p>
+<p>其关键是利用损失函数的负梯度在当前模型的值：</p>
+<p><img src="http://wx1.sinaimg.cn/mw690/ecff5bealy1ffcttrxy9dj209i0333yi.jpg" alt=""></p>
+<p>作为回归问题提升树算法中的残差（残差是指实际观测值与拟合值之间的差）的近似值，拟合一个回归树。</p>
+<p>Gradient boosting的<strong>主要思想</strong>是：每一次建立模型是在之前建立模型的损失函数的梯度下降方向。这和传统boosting对正确/错误样本加权有很大的区别。</p>
+<p><strong>XGBoost</strong>: XGBoost工具主要就是选用的Gradient Boosting方法。系列文章后续就会介绍使用XGBoost解决竞赛中的分类问题。</p>
+<h3 id="python-scikit-learn库实现boosting"><a href="#python-scikit-learn库实现boosting" class="headerlink" title="python scikit-learn库实现boosting"></a>python scikit-learn库实现boosting</h3><p>scikit-learn库将大多数成熟的机器学习算法封装成库，结合numpy库 scipy库 pandas库 matplotlib库使用，可以很方便的验证算法，这里作为示例，我们将以Iris数据集的两个特征绘制VotingClassifier的决策边界：</p>
+<p>首先，对三个示例性分类器进行初始化（DecisionTreeClassifier，KNeighborsClassifier和SVC），再将这3个分类器按照[2:1:2]的权重组成投票分类器，投票分类器是集成学习中最基础的方法了。</p>
+<p>结果如下：</p>
+<p><img src="http://wx4.sinaimg.cn/mw690/ecff5bealy1ffcv4xvulqj20ry0kowgy.jpg" alt=""></p>
+<p>可见，投票分类器加大分类性能好的弱学习方法影响力，减少分类性能一般的弱学习方法影响力，最终在图4中展现处较好的分类结果。</p>
+<p>程序如下所示（笔者吐槽一下，酷似matlab…）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="string">"""</span></div><div class="line">plot the decision boundary</div><div class="line">of a VotingClassifier</div><div class="line">"""</div><div class="line"></div><div class="line"><span class="keyword">print</span> __doc__</div><div class="line"></div><div class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"></div><div class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</div><div class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</div><div class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</div><div class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</div><div class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> VotingClassifier</div><div class="line"></div><div class="line"><span class="comment"># loading some example data</span></div><div class="line">iris = datasets.load_iris()</div><div class="line">X = iris.data[:, [<span class="number">0</span>, <span class="number">2</span>]]</div><div class="line">y = iris.target</div><div class="line"></div><div class="line"><span class="comment"># training classifiers</span></div><div class="line">clf1 = DecisionTreeClassifier(max_depth=<span class="number">4</span>)</div><div class="line">clf2 = KNeighborsClassifier(n_neighbors=<span class="number">7</span>)</div><div class="line">clf3 = SVC(kernel=<span class="string">'rbf'</span>, probability=<span class="keyword">True</span>)</div><div class="line">elfs = VotingClassifier(estimators=[(<span class="string">'dt'</span>, clf1), (<span class="string">'knn'</span>, clf2),</div><div class="line">                                    (<span class="string">'svc'</span>, clf3)],</div><div class="line">                       voting=<span class="string">'soft'</span>, weights=[<span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>])</div><div class="line"></div><div class="line">clf1.fit(X, y)</div><div class="line">clf2.fit(X, y)</div><div class="line">clf3.fit(X, y)</div><div class="line">elfs.fit(X, y)</div><div class="line"></div><div class="line"><span class="comment"># plotting decision regions</span></div><div class="line">x_min, x_max = X[:, <span class="number">0</span>].min() - <span class="number">1</span>, X[:, <span class="number">0</span>].max() + <span class="number">1</span></div><div class="line">y_min, y_max = X[:, <span class="number">1</span>].min() - <span class="number">1</span>, X[:, <span class="number">1</span>].max() + <span class="number">1</span></div><div class="line">xx, yy = np.meshgrid(np.arange(x_min, x_max, <span class="number">0.1</span>),</div><div class="line">                     np.arange(y_min, y_max, <span class="number">0.1</span>))</div><div class="line"></div><div class="line">f, axarr = plt.subplots(<span class="number">2</span>, <span class="number">2</span>, sharex=<span class="string">'col'</span>, sharey=<span class="string">'row'</span>, figsize=(<span class="number">10</span>, <span class="number">8</span>))</div><div class="line"></div><div class="line"><span class="keyword">for</span> idx, clf, tt <span class="keyword">in</span> zip(product([<span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>]),</div><div class="line">                         [clf1, clf2, clf3, elfs],</div><div class="line">                         [<span class="string">'Decision Tree (depth=4)'</span>, <span class="string">'KNN (k=7)'</span>,</div><div class="line">                         <span class="string">'Kernel SVM'</span>, <span class="string">'Soft Voting'</span>]):</div><div class="line">    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])</div><div class="line">    Z = Z.reshape(xx.shape)</div><div class="line"></div><div class="line">    axarr[idx[<span class="number">0</span>], idx[<span class="number">1</span>]].contourf(xx, yy, Z, alpha=<span class="number">0.4</span>)</div><div class="line">    axarr[idx[<span class="number">0</span>], idx[<span class="number">1</span>]].scatter(X[:, <span class="number">0</span>], X[:, <span class="number">1</span>], c=y, alpha=<span class="number">0.8</span>)</div><div class="line">    axarr[idx[<span class="number">0</span>], idx[<span class="number">1</span>]].set_title(tt)</div><div class="line"></div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p>votingClassifier只是比较简单的投票机智的集成学习方法，后面的博客中，我们会按照由浅到深的方式，介绍其他集成学习方法（主要是boosting方法）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/23/boost_method2solve_classify(1)/" rel="prev" title="提升方法（boost）解决分类问题(1)">
+                提升方法（boost）解决分类问题(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
+               alt="Edward Chou" />
+          <p class="site-author-name" itemprop="name">Edward Chou</p>
+           
+              <p class="site-description motion-element" itemprop="description">pattern recognition and machine learning</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Edward1Chou" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#集成学习-–-gt-提升方法"><span class="nav-number">1.</span> <span class="nav-text">集成学习 –> 提升方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#论述安排"><span class="nav-number">2.</span> <span class="nav-text">论述安排</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提升算法的基本思路"><span class="nav-number">3.</span> <span class="nav-text">提升算法的基本思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提升树-被认为是统计学习中性能最好的方法之一"><span class="nav-number">4.</span> <span class="nav-text">提升树(被认为是统计学习中性能最好的方法之一)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度提升-Gradient-boosting"><span class="nav-number">5.</span> <span class="nav-text">梯度提升(Gradient boosting)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-scikit-learn库实现boosting"><span class="nav-number">6.</span> <span class="nav-text">python scikit-learn库实现boosting</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward Chou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
