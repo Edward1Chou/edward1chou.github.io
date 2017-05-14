@@ -1,0 +1,701 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/bitbug_favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="GradientBoosting简单实例sklearn.ensemble.GradientBoostingRegressor官方文档 GradientBoostingRegressor 详细注释程序程序注释值得一看哟:) 吐槽一下：在这种高层封装后的python库帮助下，程序主要用力实现算法，调用现成的机器学习库就可以了，但是我没需要知道这些机器学习的原理，仅仅满足于调库这种层次，很难实现自己的">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提升方法（boost）解决分类问题(3)">
+<meta property="og:url" content="http://yoursite.com/2017/05/14/boost_method2solve_classify(3)/index.html">
+<meta property="og:site_name" content="A Blog For Real">
+<meta property="og:description" content="GradientBoosting简单实例sklearn.ensemble.GradientBoostingRegressor官方文档 GradientBoostingRegressor 详细注释程序程序注释值得一看哟:) 吐槽一下：在这种高层封装后的python库帮助下，程序主要用力实现算法，调用现成的机器学习库就可以了，但是我没需要知道这些机器学习的原理，仅仅满足于调库这种层次，很难实现自己的">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1494153340970&di=6be1478c201d45085e5196b9df21f784&imgtype=0&src=http%3A%2F%2Fwww.36dsj.com%2Fwp-content%2Fuploads%2F2015%2F08%2F1-4.png">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/ecff5bealy1ffl9ak6kngj20xc0gojsd.jpg">
+<meta property="og:updated_time" content="2017-05-14T14:36:20.696Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="提升方法（boost）解决分类问题(3)">
+<meta name="twitter:description" content="GradientBoosting简单实例sklearn.ensemble.GradientBoostingRegressor官方文档 GradientBoostingRegressor 详细注释程序程序注释值得一看哟:) 吐槽一下：在这种高层封装后的python库帮助下，程序主要用力实现算法，调用现成的机器学习库就可以了，但是我没需要知道这些机器学习的原理，仅仅满足于调库这种层次，很难实现自己的">
+<meta name="twitter:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1494153340970&di=6be1478c201d45085e5196b9df21f784&imgtype=0&src=http%3A%2F%2Fwww.36dsj.com%2Fwp-content%2Fuploads%2F2015%2F08%2F1-4.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/14/boost_method2solve_classify(3)/"/>
+
+
+
+
+
+  <title> 提升方法（boost）解决分类问题(3) | A Blog For Real </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Blog For Real</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Do one thing at a time, and do well.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/14/boost_method2solve_classify(3)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                提升方法（boost）解决分类问题(3)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-14T22:36:20+08:00">
+                2017-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1494153340970&amp;di=6be1478c201d45085e5196b9df21f784&amp;imgtype=0&amp;src=http%3A%2F%2Fwww.36dsj.com%2Fwp-content%2Fuploads%2F2015%2F08%2F1-4.png" alt=""></p>
+<h3 id="GradientBoosting简单实例"><a href="#GradientBoosting简单实例" class="headerlink" title="GradientBoosting简单实例"></a>GradientBoosting简单实例</h3><p>sklearn.ensemble.GradientBoostingRegressor官方文档</p>
+<p><a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html" target="_blank" rel="external">GradientBoostingRegressor</a></p>
+<h3 id="详细注释程序"><a href="#详细注释程序" class="headerlink" title="详细注释程序"></a>详细注释程序</h3><p>程序注释值得一看哟:)</p>
+<p>吐槽一下：在这种高层封装后的python库帮助下，程序主要用力实现算法，调用现成的机器学习库就可以了，但是我没需要知道这些机器学习的原理，仅仅满足于调库这种层次，很难实现自己的算法，提高自己的编程实现能力。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> ensemble</div><div class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</div><div class="line"><span class="keyword">from</span> sklearn.utils <span class="keyword">import</span> shuffle</div><div class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error <span class="comment">#均方误差</span></div><div class="line"></div><div class="line"><span class="comment"># load data</span></div><div class="line">boston = datasets.load_boston()</div><div class="line">X, y = shuffle(boston.data, boston.target, random_state=<span class="number">13</span>)<span class="comment"># 乱序，X，y还是对应的</span></div><div class="line">X = X.astype(np.float32) <span class="comment"># np.array.astype转换数据类型</span></div><div class="line">offset = int(X.shape[<span class="number">0</span>] * <span class="number">0.9</span>) <span class="comment"># np.array.shape返回(row, line),shape[0]代表样本个数</span></div><div class="line">X_train, y_train = X[:offset], y[:offset] <span class="comment"># 90%数据用作训练</span></div><div class="line">X_test, y_test = X[offset:], y[offset:] <span class="comment"># 10%数据用作测试</span></div><div class="line"></div><div class="line"><span class="comment"># fit regression model</span></div><div class="line">params = &#123;<span class="string">'n_estimators'</span>: <span class="number">500</span>, <span class="string">'max_depth'</span>: <span class="number">4</span>, <span class="string">'min_samples_split'</span>: <span class="number">2</span>,</div><div class="line"><span class="string">'learning_rate'</span>: <span class="number">0.01</span>, <span class="string">'loss'</span>: <span class="string">'ls'</span>&#125;</div><div class="line">clf = ensemble.GradientBoostingRegressor(**params)</div><div class="line">clf.fit(X_train, y_train) <span class="comment"># 训练 gradient boosting model.</span></div><div class="line">mse = mean_squared_error(y_test, clf.predict(X_test)) <span class="comment"># 均方误差</span></div><div class="line">print(<span class="string">"MSE: %.4f"</span> % mse) <span class="comment"># output:MSE: 6.6213</span></div><div class="line"></div><div class="line"><span class="comment"># Plot training deviance偏差</span></div><div class="line"><span class="comment"># compute test set deviance 计算测试集的偏差</span></div><div class="line">test_score = np.zeros((params[<span class="string">'n_estimators'</span>],), dtype=np.float64) <span class="comment"># 1*500的零向量</span></div><div class="line"></div><div class="line"><span class="keyword">for</span> i, y_pred <span class="keyword">in</span> enumerate(clf.staged_predict(X_test)): <span class="comment"># 在500个阶段，每个阶段对X_test预测回归目标</span></div><div class="line">    test_score[i] = clf.loss_(y_test, y_pred) <span class="comment"># 在测试集上的损失函数</span></div><div class="line"></div><div class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">6</span>)) <span class="comment"># width=12inches height=6inches</span></div><div class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>) <span class="comment"># 1行2列的第一个图像</span></div><div class="line">plt.title(<span class="string">'Deviance'</span>)</div><div class="line">plt.plot(np.arange(params[<span class="string">'n_estimators'</span>]) + <span class="number">1</span>, clf.train_score_, <span class="string">'b-'</span>,</div><div class="line">                   label=<span class="string">'Training Set Deviance'</span>) <span class="comment"># plot(x, y, 'color', label)</span></div><div class="line">plt.plot(np.arange(params[<span class="string">'n_estimators'</span>]) + <span class="number">1</span>, test_score, <span class="string">'r-'</span>,</div><div class="line">                   label=<span class="string">'Test Set Deviance'</span>)</div><div class="line">plt.legend(loc=<span class="string">'upper right'</span>) <span class="comment"># 说明</span></div><div class="line">plt.xlabel(<span class="string">'Boosting Iterations'</span>)</div><div class="line">plt.ylabel(<span class="string">'Deviance'</span>)</div><div class="line"></div><div class="line"><span class="comment"># plot feature importance 特征重要程度</span></div><div class="line">feature_importance = clf.feature_importances_ <span class="comment"># array, shape = [n_features]</span></div><div class="line">                                              <span class="comment"># the higher, the more important the feature</span></div><div class="line"><span class="comment"># make importances relative to max importance 归一化</span></div><div class="line">feature_importance = <span class="number">100.0</span> * (feature_importance / feature_importance.max())</div><div class="line">sorted_idx = np.argsort(feature_importance) <span class="comment"># 返回升序序列组成的array</span></div><div class="line"><span class="comment"># np.argsort  </span></div><div class="line"><span class="comment"># x = np.array([3, 1, 2])</span></div><div class="line"><span class="comment"># np.argsort(x) #按升序排列（return:array([1, 2, 0])）   -x 为降序</span></div><div class="line"><span class="comment"># x[np.argsort(x)] #通过索引值排序后的数组</span></div><div class="line"><span class="comment"># array([1, 2, 3])</span></div><div class="line">pos = np.arange(sorted_idx.shape[<span class="number">0</span>]) + <span class="number">.5</span> </div><div class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>) <span class="comment"># 1行2列的第二个图像</span></div><div class="line">plt.barh(pos, feature_importance[sorted_idx], align=<span class="string">'center'</span>) <span class="comment"># Make a horizontal bar plot. </span></div><div class="line">plt.yticks(pos, boston.feature_names[sorted_idx]) <span class="comment"># Get or set the y-limits of the current tick locations and labels.</span></div><div class="line">plt.xlabel(<span class="string">'Relative Importance'</span>)</div><div class="line">plt.title(<span class="string">'Variable Importance'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="http://wx1.sinaimg.cn/mw690/ecff5bealy1ffl9ak6kngj20xc0gojsd.jpg" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/07/boost_method2solve_classify(2)/" rel="prev" title="提升方法（boost）解决分类问题(2)">
+                提升方法（boost）解决分类问题(2) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
+               alt="Edward Chou" />
+          <p class="site-author-name" itemprop="name">Edward Chou</p>
+           
+              <p class="site-description motion-element" itemprop="description">pattern recognition and machine learning</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Edward1Chou" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GradientBoosting简单实例"><span class="nav-number">1.</span> <span class="nav-text">GradientBoosting简单实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详细注释程序"><span class="nav-number">2.</span> <span class="nav-text">详细注释程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果"><span class="nav-number">3.</span> <span class="nav-text">效果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward Chou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
