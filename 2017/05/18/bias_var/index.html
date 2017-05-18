@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="machine_learning," />
 
 
 
@@ -87,20 +87,21 @@
 
 
 
-<meta name="description" content="问题阐述笔者在kaggle中遇到的第一道数据挖掘入门竞赛题目为——预测泰坦尼克上哪些乘客更加容易存活，天池上的新手竞赛题——O2O优惠券的使用预测。 问题分析监督学习方法大致分为如下三类：  很明显，乘客生还和O2O优惠券是否使用都是离散事件，所以，上述问题所属的大类都是分类问题。 分类问题的常见解法这里所说的解法，其实范畴很大，不如先来讲下统计学习的基本框架。之所以要先来讲述下框架，是因为如果没">
-<meta name="keywords">
+<meta name="description" content="偏差（bias）度量了学习算法的期望预测与真实结果的偏离程度，即刻画了学习算法本身的拟合能力 方差（variance）度量了同样大小训练集的变动所导致的学习性能的变化，即刻画了数据扰动所造成的影响 噪声（noise）表达了在当前任务上任何学习算法所能达到的期望泛化误差的下界，即刻画了学习问题本身的难度 “偏差-方差分解”（bias-variance decomposition）是解释学习算法泛化性">
+<meta name="keywords" content="machine_learning">
 <meta property="og:type" content="article">
-<meta property="og:title" content="提升方法（boost）解决分类问题(1)">
-<meta property="og:url" content="http://yoursite.com/2017/04/23/boost_method2solve_classify(1)/index.html">
+<meta property="og:title" content="偏差-方差 与 泛化误差">
+<meta property="og:url" content="http://yoursite.com/2017/05/18/bias_var/index.html">
 <meta property="og:site_name" content="A Blog For Real">
-<meta property="og:description" content="问题阐述笔者在kaggle中遇到的第一道数据挖掘入门竞赛题目为——预测泰坦尼克上哪些乘客更加容易存活，天池上的新手竞赛题——O2O优惠券的使用预测。 问题分析监督学习方法大致分为如下三类：  很明显，乘客生还和O2O优惠券是否使用都是离散事件，所以，上述问题所属的大类都是分类问题。 分类问题的常见解法这里所说的解法，其实范畴很大，不如先来讲下统计学习的基本框架。之所以要先来讲述下框架，是因为如果没">
-<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/ecff5bealy1fenotvjlzaj20io082glt.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/ecff5bealy1fewyjqwi36j20ce02bt8p.jpg">
-<meta property="og:updated_time" content="2017-04-23T14:07:34.133Z">
+<meta property="og:description" content="偏差（bias）度量了学习算法的期望预测与真实结果的偏离程度，即刻画了学习算法本身的拟合能力 方差（variance）度量了同样大小训练集的变动所导致的学习性能的变化，即刻画了数据扰动所造成的影响 噪声（noise）表达了在当前任务上任何学习算法所能达到的期望泛化误差的下界，即刻画了学习问题本身的难度 “偏差-方差分解”（bias-variance decomposition）是解释学习算法泛化性">
+<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/ecff5bealy1fenpvyl9dkj20b0014746.jpg">
+<meta property="og:image" content="http://static.datartisan.com/upload/attachment/2015/08/6UBxj3Rg.png">
+<meta property="og:image" content="http://static.datartisan.com/upload/attachment/2015/08/Ugj1NJBn.png">
+<meta property="og:updated_time" content="2017-05-18T12:20:56.936Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="提升方法（boost）解决分类问题(1)">
-<meta name="twitter:description" content="问题阐述笔者在kaggle中遇到的第一道数据挖掘入门竞赛题目为——预测泰坦尼克上哪些乘客更加容易存活，天池上的新手竞赛题——O2O优惠券的使用预测。 问题分析监督学习方法大致分为如下三类：  很明显，乘客生还和O2O优惠券是否使用都是离散事件，所以，上述问题所属的大类都是分类问题。 分类问题的常见解法这里所说的解法，其实范畴很大，不如先来讲下统计学习的基本框架。之所以要先来讲述下框架，是因为如果没">
-<meta name="twitter:image" content="http://wx4.sinaimg.cn/mw690/ecff5bealy1fenotvjlzaj20io082glt.jpg">
+<meta name="twitter:title" content="偏差-方差 与 泛化误差">
+<meta name="twitter:description" content="偏差（bias）度量了学习算法的期望预测与真实结果的偏离程度，即刻画了学习算法本身的拟合能力 方差（variance）度量了同样大小训练集的变动所导致的学习性能的变化，即刻画了数据扰动所造成的影响 噪声（noise）表达了在当前任务上任何学习算法所能达到的期望泛化误差的下界，即刻画了学习问题本身的难度 “偏差-方差分解”（bias-variance decomposition）是解释学习算法泛化性">
+<meta name="twitter:image" content="http://wx3.sinaimg.cn/mw690/ecff5bealy1fenpvyl9dkj20b0014746.jpg">
 
 
 
@@ -128,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/23/boost_method2solve_classify(1)/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/18/bias_var/"/>
 
 
 
 
 
-  <title> 提升方法（boost）解决分类问题(1) | A Blog For Real </title>
+  <title> 偏差-方差 与 泛化误差 | A Blog For Real </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -273,7 +274,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/23/boost_method2solve_classify(1)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/18/bias_var/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Edward Chou">
@@ -294,7 +295,7 @@
             
             
               
-                提升方法（boost）解决分类问题(1)
+                偏差-方差 与 泛化误差
               
             
           </h1>
@@ -309,8 +310,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:08:18+08:00">
-                2017-04-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-18T20:20:56+08:00">
+                2017-05-18
               </time>
             
 
@@ -319,6 +320,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine_learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -345,43 +368,18 @@
       
 
       
-        <h3 id="问题阐述"><a href="#问题阐述" class="headerlink" title="问题阐述"></a>问题阐述</h3><p>笔者在kaggle中遇到的第一道数据挖掘入门竞赛题目为——预测泰坦尼克上哪些乘客更加容易存活，天池上的新手竞赛题——O2O优惠券的使用预测。</p>
-<h3 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h3><p>监督学习方法大致分为如下三类：</p>
-<p><img src="http://wx4.sinaimg.cn/mw690/ecff5bealy1fenotvjlzaj20io082glt.jpg" alt=""></p>
-<p>很明显，乘客生还和O2O优惠券是否使用都是离散事件，所以，上述问题所属的大类都是分类问题。</p>
-<h3 id="分类问题的常见解法"><a href="#分类问题的常见解法" class="headerlink" title="分类问题的常见解法"></a>分类问题的常见解法</h3><p>这里所说的解法，其实范畴很大，不如先来讲下统计学习的基本框架。之所以要先来讲述下框架，是因为如果没有一个系统的机器学习概念的话，很容易把一些模型，优化算法弄混淆，在真正遇到问题时，有了最基本的系统概念的话，能把问题处理的更加井井有条。</p>
-<p><em>统计学习三要素</em></p>
-<p>方法=模型+策略+算法</p>
-<ul>
-<li><p>模型</p>
-<p>  即为将要学习到的模型，大概可以分为两类：</p>
-<ul>
-<li>条件概率分布形式 ===》 概率模型</li>
-<li>决策函数形式     ===》 非概率模型</li>
-</ul>
-</li>
-<li><p>策略</p>
-<p>  策略即准则，在何种准则下，能够从假设空间中选取最优模型</p>
-<ul>
-<li>损失函数</li>
-<li>风险函数：是损失函数关于联合分布下的平均意义下的损失，积分形式</li>
-<li>经验风险：将风险函数的积分形式转成求和形式，根据大数定律，两者相等</li>
-<li><p>经验风险最小化和结构风险最小化：因为大数定律需要训练样本数量很大时才能成立，一般情况下会有区别，引入这两项是为了矫正经验风险代替风险函数的缺点</p>
-<p>值得注意的是：</p>
-</li>
-</ul>
-<ol>
-<li>样本多时，用经验风险最小化empirical risk minimization,ERM（包括极大似然估计）；</li>
-<li>样本少时，用结构风险最小化structural risk minimization,SRM（即正则化）（包括贝叶斯估计中的最大后验概率估计）</li>
-</ol>
-<p><img src="http://wx1.sinaimg.cn/mw690/ecff5bealy1fewyjqwi36j20ce02bt8p.jpg" alt=""></p>
-</li>
-</ul>
-<p>其中，红框部分即为正则项，也称为罚项。</p>
-<ul>
-<li>算法</li>
-</ul>
-<p>即具体计算方法（最后一步），即用什么计算方法求解最优模型。这就是统计学习中的最优化问题。如何保证找到全局最优解，并在求解的过程中保持高效，这就成为了一个重要问题。</p>
+        <h4 id="偏差（bias）"><a href="#偏差（bias）" class="headerlink" title="偏差（bias）"></a>偏差（bias）</h4><p>度量了学习算法的期望预测与真实结果的偏离程度，即刻画了学习算法本身的拟合能力</p>
+<h4 id="方差（variance）"><a href="#方差（variance）" class="headerlink" title="方差（variance）"></a>方差（variance）</h4><p>度量了同样大小训练集的变动所导致的学习性能的变化，即刻画了数据扰动所造成的影响</p>
+<h4 id="噪声（noise）"><a href="#噪声（noise）" class="headerlink" title="噪声（noise）"></a>噪声（noise）</h4><p>表达了在当前任务上任何学习算法所能达到的期望泛化误差的下界，即刻画了学习问题本身的难度</p>
+<p>“偏差-方差分解”（bias-variance decomposition）是解释学习算法泛化性能的一种重要工具。</p>
+<p>泛化误差，即统计学习三要素的策略中的期望风险（风险函数），定义如下（其中，x为测试样本，D为训练集，f为学习到的模型）</p>
+<p><img src="http://wx3.sinaimg.cn/mw690/ecff5bealy1fenpvyl9dkj20b0014746.jpg" alt=""></p>
+<p>下面的图也许会让你对这一点更加明白（图中红色区域为真实值，蓝点则为预测值）：</p>
+<p><img src="http://static.datartisan.com/upload/attachment/2015/08/6UBxj3Rg.png" alt=""></p>
+<p><em>通常情况下，当你增加模型的复杂性时，你会发现偏误的降低将直接导致模型总误差的减少，但当过了某个特定的点之后，再增加模型的复杂程度则会适得其反。最终，你的模型将面临过度拟合的问题，并且具有了较高的方差。</em></p>
+<p>理论上，最优的模型应该做到<strong>尽量保持上述两类误差之间平衡</strong>，这被称为偏误与方差之间的权衡管理，而集成学习也正是执行这种权衡的方法之一.</p>
+<p>如下所示：</p>
+<p><img src="http://static.datartisan.com/upload/attachment/2015/08/Ugj1NJBn.png" alt=""></p>
 
       
     </div>
@@ -409,6 +407,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/machine-learning/" rel="tag"># machine_learning</a>
+          
+        </div>
+      
 
       
         
@@ -418,8 +422,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/07/boost_method2solve_classify(2)/" rel="next" title="提升方法（boost）解决分类问题(2)">
-                <i class="fa fa-chevron-left"></i> 提升方法（boost）解决分类问题(2)
+              <a href="/2017/05/18/boost_method2solve_classify(1)/" rel="next" title="提升方法（boost）解决分类问题(1)">
+                <i class="fa fa-chevron-left"></i> 提升方法（boost）解决分类问题(1)
               </a>
             
           </div>
@@ -513,7 +517,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -524,7 +528,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -570,7 +574,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题阐述"><span class="nav-number">1.</span> <span class="nav-text">问题阐述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题分析"><span class="nav-number">2.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类问题的常见解法"><span class="nav-number">3.</span> <span class="nav-text">分类问题的常见解法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#偏差（bias）"><span class="nav-number">1.</span> <span class="nav-text">偏差（bias）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方差（variance）"><span class="nav-number">2.</span> <span class="nav-text">方差（variance）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#噪声（noise）"><span class="nav-number">3.</span> <span class="nav-text">噪声（noise）</span></a></li></ol></div>
             
 
           </div>
