@@ -1,0 +1,761 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="design_patterns,python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/bitbug_favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="引言该模型用于克隆对象，即得到新的副本。这里要区分引用和副本，两份引用，任何一方改变对象，另一方都可见。副本则不会。 定义原型设计模式（Prototype design pattern）帮助我们创建对象的克隆，其最简单的形式就是一个clone()函数，接受一个对象作为输入参数，返回输入对象的一个副本。在python中可以使用copy.deepcopy()函数来完成。 应用案例对于复制复杂对象，我们">
+<meta name="keywords" content="design_patterns,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python原型模式-----创建型模式(3)">
+<meta property="og:url" content="http://yoursite.com/2017/05/29/python_proto_pattern/index.html">
+<meta property="og:site_name" content="A Blog For Real">
+<meta property="og:description" content="引言该模型用于克隆对象，即得到新的副本。这里要区分引用和副本，两份引用，任何一方改变对象，另一方都可见。副本则不会。 定义原型设计模式（Prototype design pattern）帮助我们创建对象的克隆，其最简单的形式就是一个clone()函数，接受一个对象作为输入参数，返回输入对象的一个副本。在python中可以使用copy.deepcopy()函数来完成。 应用案例对于复制复杂对象，我们">
+<meta property="og:updated_time" content="2017-05-29T14:48:21.258Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python原型模式-----创建型模式(3)">
+<meta name="twitter:description" content="引言该模型用于克隆对象，即得到新的副本。这里要区分引用和副本，两份引用，任何一方改变对象，另一方都可见。副本则不会。 定义原型设计模式（Prototype design pattern）帮助我们创建对象的克隆，其最简单的形式就是一个clone()函数，接受一个对象作为输入参数，返回输入对象的一个副本。在python中可以使用copy.deepcopy()函数来完成。 应用案例对于复制复杂对象，我们">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/29/python_proto_pattern/"/>
+
+
+
+
+
+  <title> python原型模式-----创建型模式(3) | A Blog For Real </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Blog For Real</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Do one thing at a time, and do well.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/29/python_proto_pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                python原型模式-----创建型模式(3)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-29T22:48:21+08:00">
+                2017-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
+                    <span itemprop="name">design_patterns</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>该模型用于克隆对象，即得到新的副本。这里要区分引用和副本，两份引用，任何一方改变对象，另一方都可见。副本则不会。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>原型设计模式（Prototype design pattern）帮助我们创建对象的克隆，其最简单的形式就是一个clone()函数，接受一个对象作为输入参数，返回输入对象的一个副本。在python中可以使用copy.deepcopy()函数来完成。</p>
+<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>对于复制复杂对象，我们可以将对象当作是从数据库中获取的，并引用其他一些也是从数据库中获取的对象。若通过多次重复查询数据来创建一个对象，则要做很多工作。</p>
+<p>至此，我们仅涉及了引用和副本的问题，而副本又可以分为深副本和浅副本。深副本就是：原始对象的所有数据都被简单复制到克隆对象中，没有例外。浅副本则依赖引用：我们可以引入数据共享和写时复制一类的技术来优化性能（例如，减少克隆对象的创建时间）和内存使用。</p>
+<p>在python中，可以使用copy.copy()函数进行浅复制。</p>
+<ul>
+<li>浅副本构造一个新的复合对象后，（会尽可能地）将在原始对象中找到的对象的引用插入新对象中</li>
+<li>深副本构造一个新的复合对象后，会递归地将在原始对象中找到的对象的副本插入新对象中。</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>使用原型模型创建一个展示图书信息的应用。</p>
+<p>描述一本书，这里需要注意的是采用变长列表传参，避免可伸缩构造器问题。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    abstract class for the book</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, authors, price, **rest)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        :param name: </div><div class="line">        :param authors: </div><div class="line">        :param price: </div><div class="line">        :param rest: 包括 出版商、长度、标签、出版日期 </div><div class="line">        """</div><div class="line">        self.name = name</div><div class="line">        self.authors = authors</div><div class="line">        self.price = price</div><div class="line">        self.__dict__.update(rest)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></div><div class="line">        introduce_list = []</div><div class="line">        ordered = OrderedDict(sorted(self.__dict__.items()))</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> ordered.keys():</div><div class="line">            introduce_list.append(<span class="string">'&#123;&#125;: &#123;&#125;'</span>.format(i, ordered[i]))</div><div class="line">            <span class="keyword">if</span> i == <span class="string">'price'</span>:</div><div class="line">                introduce_list.append(<span class="string">'$'</span>)</div><div class="line">            introduce_list.append(<span class="string">'\n'</span>)</div><div class="line">        <span class="keyword">return</span> <span class="string">''</span>.join(introduce_list)</div></pre></td></tr></table></figure>
+<p>ProtoType类实现了原型设计模式，核心是clone()方法，register()和unregister()方法用于在字典中追踪被克隆的对象，并不是必要的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Prototype</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    implement for proto pattern</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.objects = dict()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">register</span><span class="params">(self, identifier, obj)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        to track object</div><div class="line">        :param identifier: </div><div class="line">        :param obj: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.objects[identifier] = obj</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">unregister</span><span class="params">(self, identifier)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        delete obj</div><div class="line">        :param identifier: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        <span class="keyword">del</span> self.objects[identifier]</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">clone</span><span class="params">(self, identifier, **attr)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        deep copy</div><div class="line">        :param identifier: </div><div class="line">        :param attr: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        found = self.objects.get(identifier)</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> found:</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'Incorrect object identifier: &#123;&#125;'</span>.format(identifier))</div><div class="line">        obj = copy.deepcopy(found)</div><div class="line">        obj.__dict__.update(attr)</div><div class="line">        <span class="keyword">return</span> obj</div></pre></td></tr></table></figure>
+<p>主函数传入了新的参数edition</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    b1 = Book(<span class="string">'The C Programming Language'</span>, (<span class="string">'Brian W. Kernighan'</span>, <span class="string">'Dennis M. Ritchie'</span>),</div><div class="line">              price=<span class="number">118</span>, publisher=<span class="string">'Prentice Hall'</span>, length=<span class="number">228</span>, publication_date=<span class="string">'1978-02-22'</span>,</div><div class="line">              tags=(<span class="string">'C'</span>, <span class="string">'programming'</span>, <span class="string">'algorithms'</span>, <span class="string">'data structure'</span>))</div><div class="line">    prototype = Prototype()</div><div class="line">    cid = <span class="string">'k&amp;r-first'</span></div><div class="line">    prototype.register(cid, b1)</div><div class="line">    b2 = prototype.clone(cid, name=<span class="string">'The C Programming Language(ANSI)'</span>, price=<span class="number">48.99</span>,</div><div class="line">                         length=<span class="number">274</span>, publication_date=<span class="string">'1988-04-01'</span>, edition=<span class="number">2</span>)</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> (b1, b2):</div><div class="line">        print(i)</div><div class="line">    print(<span class="string">"ID b1 : &#123;&#125; != ID b2 : &#123;&#125;"</span>.format(id(b1), id(b2)))</div></pre></td></tr></table></figure>
+<p>原型模式是python的一个内置特性，所以虽然我们经常使用，但是没有太多察觉。</p>
+<p>第四章我们要介绍适配器模式，它是一种数据结构设计模式，可用于实现不兼容软件之间的借口兼容问题。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/29/python_builder_pattern/" rel="next" title="python建造者模式-----创建型模式(2)">
+                <i class="fa fa-chevron-left"></i> python建造者模式-----创建型模式(2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/18/python_factory_mode/" rel="prev" title="python工厂模式----创建型模式(1)">
+                python工厂模式----创建型模式(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
+               alt="Edward Chou" />
+          <p class="site-author-name" itemprop="name">Edward Chou</p>
+           
+              <p class="site-description motion-element" itemprop="description">pattern recognition and machine learning</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Edward1Chou" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">3.</span> <span class="nav-text">应用案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward Chou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

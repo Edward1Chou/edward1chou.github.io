@@ -1,0 +1,778 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="design_patterns,python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/bitbug_favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="引言建造一个由多个部分构成的对象，而且它的构造需要一步接一步地完成。只有当各个部分都建好，这个对象才是完整的。这正是建造者设计模式(builder design pattern)的用武之地。建造者模式将一个复杂对象的构造过程与其表现分离，这样，同一个构造过程可用于创建多个不同的表现。 应用案例如果我们知道一个对象必须经过多个步骤来创建，并且要求同一个构造过程可以产生不同的表现，就可以使用创建者模式">
+<meta name="keywords" content="design_patterns,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python建造者模式-----创建型模式(2)">
+<meta property="og:url" content="http://yoursite.com/2017/05/29/python_builder_pattern/index.html">
+<meta property="og:site_name" content="A Blog For Real">
+<meta property="og:description" content="引言建造一个由多个部分构成的对象，而且它的构造需要一步接一步地完成。只有当各个部分都建好，这个对象才是完整的。这正是建造者设计模式(builder design pattern)的用武之地。建造者模式将一个复杂对象的构造过程与其表现分离，这样，同一个构造过程可用于创建多个不同的表现。 应用案例如果我们知道一个对象必须经过多个步骤来创建，并且要求同一个构造过程可以产生不同的表现，就可以使用创建者模式">
+<meta property="og:updated_time" content="2017-05-29T14:49:39.069Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python建造者模式-----创建型模式(2)">
+<meta name="twitter:description" content="引言建造一个由多个部分构成的对象，而且它的构造需要一步接一步地完成。只有当各个部分都建好，这个对象才是完整的。这正是建造者设计模式(builder design pattern)的用武之地。建造者模式将一个复杂对象的构造过程与其表现分离，这样，同一个构造过程可用于创建多个不同的表现。 应用案例如果我们知道一个对象必须经过多个步骤来创建，并且要求同一个构造过程可以产生不同的表现，就可以使用创建者模式">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/29/python_builder_pattern/"/>
+
+
+
+
+
+  <title> python建造者模式-----创建型模式(2) | A Blog For Real </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Blog For Real</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Do one thing at a time, and do well.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/29/python_builder_pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                python建造者模式-----创建型模式(2)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-29T22:49:39+08:00">
+                2017-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
+                    <span itemprop="name">design_patterns</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>建造一个由多个部分构成的对象，而且它的构造需要一步接一步地完成。只有当各个部分都建好，这个对象才是完整的。这正是建造者设计模式(builder design pattern)的用武之地。建造者模式将一个复杂对象的构造过程与其表现分离，这样，同一个构造过程可用于创建多个不同的表现。</p>
+<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>如果我们知道一个对象必须经过多个步骤来创建，并且要求同一个构造过程可以产生不同的表现，就可以使用创建者模式。</p>
+<p>这种需求存在于许多应用中，例如页面生成器（比如HTML页面生成器）、文档转换器以及用户界面（user interface, UI）表单创建工具。</p>
+<h4 id="和工厂模式区别"><a href="#和工厂模式区别" class="headerlink" title="和工厂模式区别"></a>和工厂模式区别</h4><p>工厂模式以单个步骤创建对象，而建造者模式以多个步骤创建对象，并且几乎始终会使用一个指挥者。</p>
+<p>另一个区别是，在工厂模式下，会立即返回一个创建好的对象；而在创建者模式下，仅在需要时客户端代码才显示的请求指挥者返回最终的对象。</p>
+<h4 id="例子：新电脑类比"><a href="#例子：新电脑类比" class="headerlink" title="例子：新电脑类比"></a>例子：新电脑类比</h4><p>此例子用于区分建造者模式和工厂模式。假设你想购买一台新电脑，如果决定购买一台特定的预配置的电脑型号，则是在使用工厂模式。所有硬件的规格都已经由制造商预先确定，制造商通常接受的仅仅是单条指令。（apple-factory.py）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! /bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="string">"""</span></div><div class="line">module name: apple-factory.py</div><div class="line">module description: factory pattern</div><div class="line">Authors: zhouchengyu(edwardchou903@icloud.com)</div><div class="line">Date:    2017/05/22 19:15</div><div class="line">"""</div><div class="line">MIN14 = <span class="string">'1.4GHz Mac mini'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppleFactory</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    factory pattern for buy apple    </div><div class="line">    """</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MacMini14</span><span class="params">(object)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        apple model: mac_min_14</div><div class="line">        """</div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">            self.memory = <span class="number">4</span></div><div class="line">            self.hdd = <span class="number">500</span></div><div class="line">            self.gpu = <span class="string">'Intel HD Graphics 5000'</span></div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></div><div class="line">            info = &#123;<span class="string">"Model: &#123;&#125;"</span>.format(MIN14),</div><div class="line">                    <span class="string">"Memory: &#123;&#125;GB"</span>.format(self.memory),</div><div class="line">                    <span class="string">"Hdd: &#123;&#125;GB"</span>.format(self.hdd),</div><div class="line">                    <span class="string">"Graphics Card: &#123;&#125;"</span>.format(self.gpu)&#125;</div><div class="line">            <span class="keyword">return</span> <span class="string">'\n'</span>.join(info)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build_computer</span><span class="params">(self, model)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        implement factory pattern</div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        <span class="keyword">if</span> (model == MIN14):</div><div class="line">            <span class="keyword">return</span> self.MacMini14()</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            print(<span class="string">"I don't know how to build &#123;&#125;"</span>.format(model))</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    fac = AppleFactory()</div><div class="line">    mac_mini = fac.build_computer(MIN14)</div><div class="line">    print(mac_mini)</div><div class="line">    unknown = fac.build_computer(<span class="string">"Alias"</span>)</div></pre></td></tr></table></figure>
+<p>另一种选择是购买一台定制的PC。这种情况就需要使用建造者模式，你是指挥者，翔制造商（建造者）提供指令说明心中理想的电脑规格。（computer-builder.py）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#! /bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="string">"""</span></div><div class="line">module name: computer-builder.py</div><div class="line">module description: builder pattern for build computer</div><div class="line">Authors: zhouchengyu(edwardchou903@icloud.com)</div><div class="line">Date:    2017/05/22 20:01</div><div class="line">"""</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Computer</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    abstract class for computer</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, serial_num)</span>:</span></div><div class="line">        self.serial = serial_num</div><div class="line">        self.memory = <span class="keyword">None</span></div><div class="line">        self.hdd = <span class="keyword">None</span></div><div class="line">        self.gpu = <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></div><div class="line">        info = &#123;<span class="string">'Memory: &#123;&#125;GB'</span>.format(self.memory),</div><div class="line">                <span class="string">'Hard Disk: &#123;&#125;GB'</span>.format(self.hdd),</div><div class="line">                <span class="string">'Graphics Card: &#123;&#125;'</span>.format(self.gpu)&#125;</div><div class="line">        <span class="keyword">return</span> <span class="string">'\n'</span>.join(info)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ComputerBuilder</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    implement for builder pattern</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.computer = Computer(<span class="string">'ABC123456'</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">configure_memory</span><span class="params">(self, memory_amount)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        :param memory_amount: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.computer.memory = memory_amount</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">configure_hdd</span><span class="params">(self, hdd_amount)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        :param hdd_amount: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.computer.hdd = hdd_amount</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">configure_gpu</span><span class="params">(self, gpu_module)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        :param gpu_module: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.computer.gpu = gpu_module</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HardwareEngineer</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    director</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.builder = <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">construct_computer</span><span class="params">(self, memory, hdd, gpu)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        :param memory: </div><div class="line">        :param hdd: </div><div class="line">        :param gpu: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.builder = ComputerBuilder()</div><div class="line">        self.builder.configure_memory(memory)</div><div class="line">        self.builder.configure_hdd(hdd)</div><div class="line">        self.builder.configure_gpu(gpu)</div><div class="line"></div><div class="line"><span class="meta">    @property</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">computer</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> self.builder.computer</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    engineer = HardwareEngineer()</div><div class="line">    engineer.construct_computer(memory=<span class="number">8</span>, hdd=<span class="number">1000</span>, gpu=<span class="string">'Titax'</span>)</div><div class="line">    computer = engineer.computer</div><div class="line">    print(computer)</div></pre></td></tr></table></figure>
+<p>基本的变化是引入了一个建造者ComputerBuilder, 一个指挥者HardwareEngineer以及一步一步装配一台电脑的过程，这样就支持不同的配置了。</p>
+<h4 id="例子：比萨订购应用"><a href="#例子：比萨订购应用" class="headerlink" title="例子：比萨订购应用"></a>例子：比萨订购应用</h4><p>注意其中enum库是python3才支持的。</p>
+<p>详情见enum的文档： <a href="https://docs.python.org/3/library/enum.html#functional-api" target="_blank" rel="external">enum文档</a></p>
+<p>先导入一些模块，声明一些Enum参数，以及一个在应用中会使用多次的常量。常量STEP_DELAY用于在准备一个披萨的不同步骤之间添加时间延迟。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> enum <span class="keyword">import</span> Enum</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line"></div><div class="line">PizzaProgress = Enum(<span class="string">'PizzaProgress'</span>, <span class="string">'queued preparation baking ready'</span>)</div><div class="line">PizzaDough = Enum(<span class="string">'PizzaDough'</span>, <span class="string">'thin thick'</span>) <span class="comment"># 生面团</span></div><div class="line">PizzaSauce = Enum(<span class="string">'PizzaSauce'</span>, <span class="string">'tomato creme_fraiche'</span>) <span class="comment"># 调味汁</span></div><div class="line">PizzaTopping = Enum(<span class="string">'PizzaTopping'</span>, <span class="string">'mozzarella double_mozzarella bacon '</span></div><div class="line">                                    <span class="string">'ham mushrooms red_onion oregano'</span>) <span class="comment">#糕点上装饰</span></div><div class="line">STEP_DELAY = <span class="number">3</span> <span class="comment"># 单位秒</span></div></pre></td></tr></table></figure>
+<p>最终产品是一个比萨，由Pizza类描述。Pizza类会比较短小，因为使用建造者模式，最终的产品（类）并没有多少职责，因为它不支持直接实例化。建造者会创建一个最终产品的实例，并保证这个实例完全准备好。</p>
+<p>最终的产品（类），如Pizza类只是将所有的数据初始化为合理的默认值。这里有个例外，即prepare_dough(),原因是：</p>
+<ul>
+<li>通常最终产品会最小化，但不意味着绝不应该给它分配任何职能；</li>
+<li>为了通过组合，提高代码的复用。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pizza</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    abstract class: Pizza</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></div><div class="line">        self.name = name</div><div class="line">        self.dough = <span class="keyword">None</span></div><div class="line">        self.sauce = <span class="keyword">None</span></div><div class="line">        self.topping = []</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> self.name</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prepare_dough</span><span class="params">(self, dough)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        :param dough: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.dough = dough</div><div class="line">        print(<span class="string">'preparing the &#123;&#125; dough of your &#123;&#125;...'</span>.format(self.dough.name, self))</div><div class="line">        time.sleep(STEP_DELAY)</div><div class="line">        print(<span class="string">'done with the &#123;&#125; dough'</span>.format(self.dough.name))</div></pre></td></tr></table></figure>
+<p>这里有两个建造者，一个制作MargaritaBuilder,一个制作CreamyBaconBuilder.每个建造者都创建一个pizza实例，并包含遵从披萨制作流程的方法：prepare_dough(), add_sauce(), add_topping()和bake().</p>
+<p>这里只展示MargaritaBuilder:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MargaritaBuilder</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    one builder: build margarita pizza</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.pizza = Pizza(<span class="string">'margarita'</span>)</div><div class="line">        self.progress = PizzaProgress.queued</div><div class="line">        print(<span class="string">"Progress: &#123;&#125;"</span>.format(self.progress.value))</div><div class="line">        self.baking_time = <span class="number">5</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prepare_dough</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        prepare dough: thin thick</div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.progress = PizzaProgress.preparation</div><div class="line">        self.pizza.prepare_dough(PizzaDough.thin)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_sauce</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        add sauce: tomato creme_fraiche</div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        print(<span class="string">'add the tomato sauce to your margarita...'</span>)</div><div class="line">        self.pizza.sauce = PizzaSauce.tomato</div><div class="line">        time.sleep(STEP_DELAY)</div><div class="line">        print(<span class="string">"done with the tomato sauce"</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_topping</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        add topping: mozzarella double_mozzarella bacon </div><div class="line">                     ham mushrooms red_onion oregano</div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        print(<span class="string">'add the topping (double_mozzarella oregano) to your margarita'</span>)</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> (PizzaTopping.double_mozzarella, PizzaTopping.oregano):</div><div class="line">            self.pizza.topping.append(i)</div><div class="line">        time.sleep(STEP_DELAY)</div><div class="line">        print(<span class="string">'done with the topping (double mozzarella, oregano)'</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bake</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        bake: pizzaProgress--&gt;baking</div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.progress = PizzaProgress.baking</div><div class="line">        print(<span class="string">'baking your margarita for &#123;&#125; seconds'</span>.format(self.baking_time))</div><div class="line">        time.sleep(self.baking_time)</div><div class="line">        self.progress = PizzaProgress.ready</div><div class="line">        print(<span class="string">'your margarita is ready'</span>)</div></pre></td></tr></table></figure>
+<p>在本例子中，指挥者是服务员。Waiter类的核心的是construct_pizza()方法，该方法接受一个建造者作为参数，并以正确的步骤执行所有准备步骤。选择恰当的建造者，无需修改指挥者的任何代码就可以制作不同的披萨。pizza()方法返回最终产品</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Waiter</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    director: waiter</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.builder = <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">construct_builder</span><span class="params">(self, builder)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        implement of builder</div><div class="line">        :param builder: </div><div class="line">        :return: </div><div class="line">        """</div><div class="line">        self.builder = builder</div><div class="line">        self.builder.prepare_dough()</div><div class="line">        self.builder.add_sauce()</div><div class="line">        self.builder.add_topping()</div><div class="line">        self.builder.bake()</div><div class="line"></div><div class="line"><span class="meta">    @property</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pizza</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> self.builder.pizza</div></pre></td></tr></table></figure>
+<p>函数validate_style()用来保证用户提供有效的输入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">validate_style</span><span class="params">(builders)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    validate input</div><div class="line">    :param builders: </div><div class="line">    :return: </div><div class="line">    """</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        pizza_style = input(<span class="string">'What pizza would you like, '</span></div><div class="line">                            <span class="string">'[m]argarita or [c]reamy bacon?'</span>)</div><div class="line">        builder = builders[pizza_style]()</div><div class="line">        valid_input = <span class="keyword">True</span></div><div class="line">    <span class="keyword">except</span> KeyError <span class="keyword">as</span> err:</div><div class="line">        print(<span class="string">'Sorry, only margarita (key m) and creamy '</span></div><div class="line">              <span class="string">'bacon (key c) are available'</span>)</div><div class="line">        <span class="keyword">return</span> (<span class="keyword">False</span>, <span class="keyword">None</span>)</div><div class="line">    <span class="keyword">return</span> (valid_input, builder)</div></pre></td></tr></table></figure>
+<p>实现的最后一部分：实例化一个比萨制造者，然后指挥者waiter使用披萨建造者来准备披萨。创建好的披萨可以稍后交付给客户端。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    builders = dict(m=MargaritaBuilder, c=CreamyBaconBuilder)</div><div class="line">    builder = <span class="keyword">None</span></div><div class="line">    valid_input = <span class="keyword">False</span></div><div class="line">    <span class="keyword">while</span> <span class="keyword">not</span> valid_input:</div><div class="line">        valid_input, builder = validate_style(builders)</div><div class="line">    print()</div><div class="line">    waiter = Waiter()</div><div class="line">    waiter.construct_builder(builder)</div><div class="line">    pizza = waiter.pizza</div><div class="line">    print()</div><div class="line">    print(<span class="string">'Enjoy your &#123;&#125;!'</span>.format(pizza))</div></pre></td></tr></table></figure>
+<p>详细代码见： <a href="https://github.com/Edward1Chou/design_pattern_in_python/blob/master/builder_pattern/builder.py" target="_blank" rel="external">builder.py</a></p>
+<p>如果想扩展披萨的建造者的话，可以尝试继承其中一个建造者类，或者同时继承，同时继承的例子可以参考教程: <a href="http://www.python-course.eu/python3_multiple_inheritance.php" target="_blank" rel="external">CalendarClock</a></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>在如下的几种场景中，与工厂模式相比，建造者模式更合适：</p>
+<ul>
+<li>创建一个复杂对象（对象由多个部分构成，且对象的创建要经过多个不同的步骤，这些步骤也许还需要遵从特定的顺序）</li>
+<li>要求一个对象能有不同的表现，并希望将对象的构造和表现解耦</li>
+<li>想要在某个时间点创建对象，但在稍后的时间点再访问。</li>
+</ul>
+<p>下章将介绍最后一种创建型设计模式——原型模式，用于克隆对象。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/29/python_proto_pattern/" rel="prev" title="python原型模式-----创建型模式(3)">
+                python原型模式-----创建型模式(3) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
+               alt="Edward Chou" />
+          <p class="site-author-name" itemprop="name">Edward Chou</p>
+           
+              <p class="site-description motion-element" itemprop="description">pattern recognition and machine learning</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Edward1Chou" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">2.</span> <span class="nav-text">应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#和工厂模式区别"><span class="nav-number">2.1.</span> <span class="nav-text">和工厂模式区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子：新电脑类比"><span class="nav-number">2.2.</span> <span class="nav-text">例子：新电脑类比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子：比萨订购应用"><span class="nav-number">2.3.</span> <span class="nav-text">例子：比萨订购应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward Chou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
