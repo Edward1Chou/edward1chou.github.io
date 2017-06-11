@@ -1,0 +1,795 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="design_patterns,python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/bitbug_favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="引言命令模式，该模式用于（不限于）在应用中添加撤销机制。 现在大多数软件都有撤销操作，但是，在很多年里，任何软件中都没有撤销操作。撤销操作是1974年引入的。 命令模式（command pattern）帮助我们把一个操作（撤销、重做、复制、粘贴等）封装成一个对象。简而言之，就是创建一个类，包含实现该操作所需要的所有逻辑和方法。这样做的优势如下：  我们不需要执行一个命令。命令可以按照希望的执行；">
+<meta name="keywords" content="design_patterns,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python命令模式-----行为型模式(2)">
+<meta property="og:url" content="http://yoursite.com/2017/06/11/python_command_pattern/index.html">
+<meta property="og:site_name" content="A Blog For Real">
+<meta property="og:description" content="引言命令模式，该模式用于（不限于）在应用中添加撤销机制。 现在大多数软件都有撤销操作，但是，在很多年里，任何软件中都没有撤销操作。撤销操作是1974年引入的。 命令模式（command pattern）帮助我们把一个操作（撤销、重做、复制、粘贴等）封装成一个对象。简而言之，就是创建一个类，包含实现该操作所需要的所有逻辑和方法。这样做的优势如下：  我们不需要执行一个命令。命令可以按照希望的执行；">
+<meta property="og:updated_time" content="2017-06-11T10:37:58.671Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python命令模式-----行为型模式(2)">
+<meta name="twitter:description" content="引言命令模式，该模式用于（不限于）在应用中添加撤销机制。 现在大多数软件都有撤销操作，但是，在很多年里，任何软件中都没有撤销操作。撤销操作是1974年引入的。 命令模式（command pattern）帮助我们把一个操作（撤销、重做、复制、粘贴等）封装成一个对象。简而言之，就是创建一个类，包含实现该操作所需要的所有逻辑和方法。这样做的优势如下：  我们不需要执行一个命令。命令可以按照希望的执行；">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/11/python_command_pattern/"/>
+
+
+
+
+
+  <title> python命令模式-----行为型模式(2) | A Blog For Real </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Blog For Real</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Do one thing at a time, and do well.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/11/python_command_pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                python命令模式-----行为型模式(2)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T18:37:58+08:00">
+                2017-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
+                    <span itemprop="name">design_patterns</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>命令模式，该模式用于（不限于）在应用中添加撤销机制。</p>
+<p>现在大多数软件都有撤销操作，但是，在很多年里，任何软件中都没有撤销操作。撤销操作是1974年引入的。</p>
+<p>命令模式（command pattern）帮助我们把一个操作（撤销、重做、复制、粘贴等）封装成一个对象。简而言之，就是创建一个类，包含实现该操作所需要的所有逻辑和方法。这样做的优势如下：</p>
+<ul>
+<li>我们不需要执行一个命令。命令可以按照希望的执行；</li>
+<li>调用命令的对象与知道如何执行命令的对象解耦。调用者无需知道命令的任何实现细节。</li>
+<li>如果有意义，可以把多个命令组织起来，这样调用者可以按顺序执行它们。例如，多层撤销</li>
+</ul>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="生活中的例子"><a href="#生活中的例子" class="headerlink" title="生活中的例子"></a>生活中的例子</h4><p>去餐馆点餐，顾客（客户端）会想服务员（指挥员）点餐，服务员（指挥员）将所有订单放入账单队列中，每个账单都是独立的，并且可用来执行许多不同（命令），最后将命令发送给厨师（接收者）。</p>
+<h4 id="软件中的例子"><a href="#软件中的例子" class="headerlink" title="软件中的例子"></a>软件中的例子</h4><p>PyQt是Qt工具包的pythonn绑定。PyQt包含一个QAction类，将一个动作建模为一个命令。对每个动作都支持额外的可选信息，比如，描述、工具提示、快捷键和其他。</p>
+<p>git-cola是使用python写的一个Git GUI，它使用命令模式来修改模型、变更一次提交、应用一个差异选择、签出等等。</p>
+<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>命令模式除了能做撤销操作，还有以下应用：</p>
+<ul>
+<li>GUI按钮和菜单项：前面提到的PyQt例子使用命令模式来实现按钮和菜单项上的操作；</li>
+<li>其他操作：除了撤销，还有剪切、复制、粘贴、重做和文本大写；</li>
+<li>事务型行为和日志记录：它对于变更记录一份持久化日志是很重要的。操作系统用它来从系统崩溃中恢复，关系型数据库用它来实现事务，文件系统用它来实现快照，而安装程序（向导程序）用它来恢复取消的安装；</li>
+<li>宏： 这里，宏是指一个动作序列，可在任何时间点按照要求进行录制和执行。流行的编辑器（如，vim和Emacs）都支持宏。</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>在本章中，我们将使用命令模式实现最基本的文本操作：</p>
+<ol>
+<li>创建一个文件，并随意写入一个字符串</li>
+<li>读取一个文件的内容</li>
+<li>重命名一个文件</li>
+<li>删除一个文件</li>
+</ol>
+<p>为了方便，这里规定创建对象和重命名文件支持撤销，读文件和删除文件不支持撤销。</p>
+<p>每个命令都包括两部分，初始化部分和执行部分。初始化部分由<strong>init</strong>()方法完成，包括此命令发挥作用所要求的所有信息（文件路径和将写入文件的内容等）。执行部分由execute()方法完成，仅在真正运行命令的时候才调用。</p>
+<p><strong>重命名工具：</strong> 使用RenameFile类来实现。<strong>init</strong>()方法接收源文件路径和目标文件路径作为参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RenameFile</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    rename filename</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, path_src, path_dest)</span>:</span></div><div class="line">        self.src, self.dest = path_src, path_dest</div></pre></td></tr></table></figure>
+<p>execute()方法使用os.rename()来完成实际的重命令。print方式更倾向于使用logging模块方式替代，verbose是是否激活记录过程的标志，默认激活:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">execute</span><span class="params">(self)</span>:</span></div><div class="line">    <span class="keyword">if</span> verbose:</div><div class="line">        print(<span class="string">"[renaming '&#123;&#125;' to '&#123;&#125;']"</span>.format(self.src, self.dest))</div><div class="line">    os.rename(self.src, self.dest)</div></pre></td></tr></table></figure>
+<p>这里，重命名工具支持undo()方法支持撤销操作。这里撤销操作也是通过os.rename()实现的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">undo</span><span class="params">(self)</span>:</span></div><div class="line">    <span class="keyword">if</span> verbose:</div><div class="line">        print(<span class="string">"[renaming '&#123;&#125;' back to '&#123;&#125;']"</span>.format(self.dest, self.src))</div><div class="line">    os.rename(self.dest, self.src)</div></pre></td></tr></table></figure>
+<p><strong>文件删除工具：</strong> 为单个函数实现，而不是一个类，是因为不需要为每个新添加的命令都创建一个类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete_file</span><span class="params">(path)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    delet file, no undo</div><div class="line">    :param path: </div><div class="line">    :return: </div><div class="line">    """</div><div class="line">    <span class="keyword">if</span> verbose:</div><div class="line">        print(<span class="string">"deleting file '&#123;&#125;'"</span>.format(path))</div><div class="line">    os.remove(path)</div></pre></td></tr></table></figure>
+<p><strong>创建文件工具：</strong> CreateFile类用来创建一个文件，默认向文件写入hello world文本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreateFile</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    create file</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, path, txt=<span class="string">'hello world!\n'</span>)</span>:</span></div><div class="line">        self.path, self.txt = path, txt</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">execute</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> verbose:</div><div class="line">            print(<span class="string">"[creating file '&#123;&#125;']"</span>.format(self.path))</div><div class="line">        <span class="keyword">with</span> open(self.path, mode=<span class="string">'w'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> out_file:</div><div class="line">            out_file.write(self.txt)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">undo</span><span class="params">(self)</span>:</span></div><div class="line">        delete_file(self.path)</div></pre></td></tr></table></figure>
+<p><strong>读文件工具：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReadFile</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    read file</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, path)</span>:</span></div><div class="line">        self.path = path</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">execute</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> verbose:</div><div class="line">            print(<span class="string">"[reading file '&#123;&#125;']"</span>.format(self.path))</div><div class="line">        <span class="keyword">with</span> open(self.path, mode=<span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> in_file:</div><div class="line">            print(in_file.read(), end=<span class="string">''</span>)</div></pre></td></tr></table></figure>
+<p>主函数如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    orig_name, new_name = <span class="string">'file1'</span>, <span class="string">'file2'</span></div><div class="line"></div><div class="line">    command = []</div><div class="line">    <span class="keyword">for</span> cmd <span class="keyword">in</span> CreateFile(orig_name), ReadFile(orig_name), RenameFile(orig_name, new_name):</div><div class="line">        command.append(cmd)</div><div class="line">    [c.execute() <span class="keyword">for</span> c <span class="keyword">in</span> command]</div><div class="line">    answer = input(<span class="string">'reverse the executed command? [y/n]'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> answer <span class="keyword">not</span> <span class="keyword">in</span> <span class="string">'yY'</span>:</div><div class="line">        print(<span class="string">"no undo ,execute successfully!"</span>)</div><div class="line">        exit()</div><div class="line"></div><div class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> reversed(command):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            c.undo()</div><div class="line">        <span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</div><div class="line">            <span class="keyword">pass</span></div></pre></td></tr></table></figure>
+<p>本例是使用AttributeError异常来处理“并不是所有操作都支持撤销”这个问题的，当然，还可以通过添加一个布尔方法（例如，supports_undo()或者can_be_undone()来显式检测命令是否支持撤销操作）</p>
+<p>本章设计的程序都没有支持<strong>防御性编程风格</strong>：</p>
+<ol>
+<li>重命名的文件不存在，如何？</li>
+<li>没有足够的文件权限，如何？</li>
+<li>读取一个不存在的文件，如何？</li>
+<li>检查os模块的返回值有无必要？</li>
+</ol>
+<p>还有需要注意的是，虽然删除文件我们没有使用类，但考虑到后续扩展成支持撤销操作时，我们把它设计成类的话会高效很多。</p>
+<p>完整代码见github <a href="https://github.com/Edward1Chou/design_pattern_in_python/tree/master/command_pattern" target="_blank" rel="external">命令模式实现文本操作</a></p>
+<p>第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/11/python_interpreter_pattern/" rel="next" title="python解释器模式-----行为型模式(3)">
+                <i class="fa fa-chevron-left"></i> python解释器模式-----行为型模式(3)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/11/python_chain_responsibility_pattern/" rel="prev" title="python责任链模式-----行为型模式(1)">
+                python责任链模式-----行为型模式(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
+               alt="Edward Chou" />
+          <p class="site-author-name" itemprop="name">Edward Chou</p>
+           
+              <p class="site-description motion-element" itemprop="description">pattern recognition and machine learning</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Edward1Chou" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">2.</span> <span class="nav-text">例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生活中的例子"><span class="nav-number">2.1.</span> <span class="nav-text">生活中的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软件中的例子"><span class="nav-number">2.2.</span> <span class="nav-text">软件中的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">3.</span> <span class="nav-text">应用案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward Chou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

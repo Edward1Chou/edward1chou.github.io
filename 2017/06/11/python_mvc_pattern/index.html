@@ -1,0 +1,812 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="design_patterns,python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/bitbug_favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="引言模型-视图-控制器模式：用于解耦处理用户界面的代码与处理（业务）逻辑的代码。 关注点分离（Separation of Concerns, SoC）原则是软件工程相关的设计原则之一。Soc原则的思想是将一个应用切分成不同的部分，每个部分用于解决一个单独的关注点。分层设计中的层次（数据访问层、业务逻辑层和表示层等）即是关注点的例子。使用Soc原则能简化软件应用的开发和维护。 模型-视图-控制器(M">
+<meta name="keywords" content="design_patterns,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python模型-视图-控制器模式-----结构型模式(5)">
+<meta property="og:url" content="http://yoursite.com/2017/06/11/python_mvc_pattern/index.html">
+<meta property="og:site_name" content="A Blog For Real">
+<meta property="og:description" content="引言模型-视图-控制器模式：用于解耦处理用户界面的代码与处理（业务）逻辑的代码。 关注点分离（Separation of Concerns, SoC）原则是软件工程相关的设计原则之一。Soc原则的思想是将一个应用切分成不同的部分，每个部分用于解决一个单独的关注点。分层设计中的层次（数据访问层、业务逻辑层和表示层等）即是关注点的例子。使用Soc原则能简化软件应用的开发和维护。 模型-视图-控制器(M">
+<meta property="og:updated_time" content="2017-06-11T10:33:07.090Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python模型-视图-控制器模式-----结构型模式(5)">
+<meta name="twitter:description" content="引言模型-视图-控制器模式：用于解耦处理用户界面的代码与处理（业务）逻辑的代码。 关注点分离（Separation of Concerns, SoC）原则是软件工程相关的设计原则之一。Soc原则的思想是将一个应用切分成不同的部分，每个部分用于解决一个单独的关注点。分层设计中的层次（数据访问层、业务逻辑层和表示层等）即是关注点的例子。使用Soc原则能简化软件应用的开发和维护。 模型-视图-控制器(M">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/11/python_mvc_pattern/"/>
+
+
+
+
+
+  <title> python模型-视图-控制器模式-----结构型模式(5) | A Blog For Real </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Blog For Real</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Do one thing at a time, and do well.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/11/python_mvc_pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                python模型-视图-控制器模式-----结构型模式(5)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T18:33:07+08:00">
+                2017-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
+                    <span itemprop="name">design_patterns</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>模型-视图-控制器模式：用于解耦处理用户界面的代码与处理（业务）逻辑的代码。</p>
+<p>关注点分离（Separation of Concerns, SoC）原则是软件工程相关的设计原则之一。Soc原则的思想是将一个应用切分成不同的部分，每个部分用于解决一个单独的关注点。分层设计中的层次（数据访问层、业务逻辑层和表示层等）即是关注点的例子。使用Soc原则能简化软件应用的开发和维护。</p>
+<p>模型-视图-控制器(Model-View-Controller, MVC)模式是应用到面向对象编程的Soc原则。MVC被认为是一种架构模式而不是一种设计模式。架构模式与设计模式之间的区别在于前者比后者的范畴更广。</p>
+<p>MVC非常重要，因为所有常见框架都使用了MVC或者是其略微不同的版本。</p>
+<ul>
+<li>模型是核心部分，代表着应用的信息本源，包含和管理（业务）逻辑、数据、状态以及应用的规则。</li>
+<li>视图是模型的可视化表现。视图的例子有，计算机图形用户界面、计算机终端的文本输出、智能手机的应用图形界面、PDF文档、饼图和柱状图等。视图只显示数据，并不处理数据。</li>
+<li>控制器是模型与视图之间的链接/粘附。模型和视图之间所有通信都是通过控制器进行。</li>
+</ul>
+<p>对于将初始屏幕渲染给用户之后使用MVC的应用，其典型使用方式如下所示：</p>
+<ol>
+<li>用户通过点击（键入、触摸等）某个按钮触发一个视图</li>
+<li>视图把用户操作告诉控制器</li>
+<li>控制器处理用户输入，并与模型交互</li>
+<li>模型执行所有必要的校验和状态改变，并通知控制器应该做什么</li>
+<li>控制器按照模型给出的指令，指导视图适当地更新和显示输出</li>
+</ol>
+<p>为了实现模型与其表现之间的解耦，每个视图通常都需要属于它的控制器。如果模型直接与特定视图通信，我们将无法对同一个模型使用多个视图（或至少无法以简洁模块化的方式实现）。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="现实生活的例子"><a href="#现实生活的例子" class="headerlink" title="现实生活的例子"></a>现实生活的例子</h4><p>MVC是应用于面向对象编程的Soc原则。比如，你造一栋房子，通常会请不同的专业人才来完成以下工作：安装管道和电路、粉刷房子</p>
+<p>另一个例子是餐馆，服务员接受点菜单并为顾客上菜，但是饭菜由厨师烹饪。</p>
+<h4 id="软件的例子"><a href="#软件的例子" class="headerlink" title="软件的例子"></a>软件的例子</h4><p>Web框架web2py和Django都是一个MVC框架</p>
+<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>实际上，所有流行的web框架（Django, Rails和Yii）和应用框架（iphone SDK, Android和Qt）都使用了MVC或者其变种，其变种包括模式-视图-适配器(Model-View-Adapter, MVA),模型-视图-演示者（Model-View-Presenter, MVP）等。</p>
+<p>MVC模式提供了以下好处：</p>
+<ul>
+<li>视图和模型的分离允许美工一心搞UI部分，程序员一心搞开发，不会互相干扰。</li>
+<li>由于视图和模型之间的松耦合，每个部分可以单独修改/扩展，不会相互影响。例如，添加一个新视图的成本很小，只要为其实现一个控制器就可以了。</li>
+<li>因为职责清晰，所以维护每个部分也很简单。</li>
+</ul>
+<p>从头开始实现MVC时，请确保创建的模型很智能，控制器很瘦，视图很傻瓜。</p>
+<p>智能模型：</p>
+<ul>
+<li>包含所有的校验/业务规则/逻辑</li>
+<li>处理应用的状态</li>
+<li>访问应用数据（数据库、云或其他）</li>
+<li>不依赖UI</li>
+</ul>
+<p>瘦控制器：</p>
+<ul>
+<li>在用户与视图交互时，更新模型</li>
+<li>在模型改变时，更新视图</li>
+<li>如果需要，在数据传递给模型/视图之前进行处理</li>
+<li>不展示数据</li>
+<li>不直接访问应用数据</li>
+<li>不包含校验、业务规则和逻辑</li>
+</ul>
+<p>傻瓜视图：</p>
+<ul>
+<li>展示数据</li>
+<li>允许用户与其交互</li>
+<li>仅做最小的数据处理，通常由一种模板语言提供处理能力（比如，使用简单的变量和循环控制）</li>
+<li>不存储任何数据</li>
+<li>不直接访问应用数据</li>
+<li>不包含校验、业务规则和逻辑</li>
+</ul>
+<p>如果是从头实现MVC，并且想弄清自己做得对不对，可以尝试回答以下问题：</p>
+<ol>
+<li>你的应用有GUI，它可以在使用的时候换肤吗？</li>
+<li>如果你的应用没有GUI（比如一个终端应用），为它添加GUI有多难。或者，如果添加GUI没什么用，那么是否易于添加视图从而以图表（饼图、柱状图等）或文档（PDF、电子表格等）形式展示结果？</li>
+</ol>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>名人名言打印机：用户输入一个数字，然后就能看到与这个数字相关的名人名言。名人名言存储在一个quotes元组中。这种数据通常是存储在数据库、文件或其他地方，只有模型能够直接访问它。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">quotes = (<span class="string">'A man is not complete until he is married. Then he is finished.'</span>,</div><div class="line">          <span class="string">'As I said before, I never repeat myself.'</span>,</div><div class="line">          <span class="string">'Behind a successful man is an exhausted woman.'</span>,</div><div class="line">          <span class="string">'Black holes really suck...'</span>, <span class="string">'Facts are stubborn things.'</span>)</div></pre></td></tr></table></figure>
+<p>模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">QuoteModel</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    model</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_quote</span><span class="params">(self, n)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            value = quotes[n]</div><div class="line">        <span class="keyword">except</span> IndexError <span class="keyword">as</span> err:</div><div class="line">            value = <span class="string">'Not find!'</span></div><div class="line">        <span class="keyword">return</span> value</div></pre></td></tr></table></figure>
+<p>视图：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">QuoteTerminalView</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    view</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self, quote)</span>:</span></div><div class="line">        print(<span class="string">'And the quote is: &#123;&#125;'</span>.format(quote))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">error</span><span class="params">(self, msg)</span>:</span></div><div class="line">        print(<span class="string">'Error: &#123;&#125;'</span>.format(msg))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_quote</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> input(<span class="string">'Which quote number would you like to see?'</span>)</div></pre></td></tr></table></figure>
+<p>控制器：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">QuoteTerminalController</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    controller</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.model = QuoteModel()</div><div class="line">        self.view = QuoteTerminalView()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></div><div class="line">        valid_input = <span class="keyword">False</span></div><div class="line">        <span class="keyword">while</span> <span class="keyword">not</span> valid_input:</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                n = self.view.select_quote()</div><div class="line">                n = int(n)</div><div class="line">                valid_input = <span class="keyword">True</span></div><div class="line">            <span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</div><div class="line">                self.view.error(<span class="string">"Incorrect index '&#123;&#125;'"</span>.format(n))</div><div class="line">        quote = self.model.get_quote(n)</div><div class="line">        self.view.show(quote)</div></pre></td></tr></table></figure>
+<p>完整代码见github  <a href="https://github.com/Edward1Chou/design_pattern_in_python/tree/master/mvc_pattern" target="_blank" rel="external">mvc pattern</a></p>
+<p>第九章我们会学习如何使用代理设计模式来实现一个额外的保护层，为接口提供安全性。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/11/python_proxy_pattern/" rel="next" title="python代理模式-----结构型模式(6)">
+                <i class="fa fa-chevron-left"></i> python代理模式-----结构型模式(6)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/11/python_flyweight_pattern/" rel="prev" title="python享元模式-----结构型模式(4)">
+                python享元模式-----结构型模式(4) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
+               alt="Edward Chou" />
+          <p class="site-author-name" itemprop="name">Edward Chou</p>
+           
+              <p class="site-description motion-element" itemprop="description">pattern recognition and machine learning</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Edward1Chou" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">2.</span> <span class="nav-text">例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#现实生活的例子"><span class="nav-number">2.1.</span> <span class="nav-text">现实生活的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软件的例子"><span class="nav-number">2.2.</span> <span class="nav-text">软件的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">3.</span> <span class="nav-text">应用案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward Chou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

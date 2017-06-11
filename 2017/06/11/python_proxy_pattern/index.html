@@ -1,0 +1,810 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="design_patterns,python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/bitbug_favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="引言代理设计模式来实现一个额外的保护层，为接口提供安全性或懒初始化。 在允许用户访问敏感信息之前，我们希望确保用户具备足够的权限。操作系统中也存在类似的情况，用户必须具有管理员权限才能在系统中安装新程序。 关于此类的重要操作，除了安全之外还有延迟初始化：我们想要把一个计算成本较高的对象的创建过程延迟到用户首次真正使用它的时候才进行。 这类操作通常使用代理设计模式（Proxy design patt">
+<meta name="keywords" content="design_patterns,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python代理模式-----结构型模式(6)">
+<meta property="og:url" content="http://yoursite.com/2017/06/11/python_proxy_pattern/index.html">
+<meta property="og:site_name" content="A Blog For Real">
+<meta property="og:description" content="引言代理设计模式来实现一个额外的保护层，为接口提供安全性或懒初始化。 在允许用户访问敏感信息之前，我们希望确保用户具备足够的权限。操作系统中也存在类似的情况，用户必须具有管理员权限才能在系统中安装新程序。 关于此类的重要操作，除了安全之外还有延迟初始化：我们想要把一个计算成本较高的对象的创建过程延迟到用户首次真正使用它的时候才进行。 这类操作通常使用代理设计模式（Proxy design patt">
+<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/ecff5bealy1fgdt7ontqtj20a9044q2v.jpg">
+<meta property="og:updated_time" content="2017-06-11T10:35:08.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python代理模式-----结构型模式(6)">
+<meta name="twitter:description" content="引言代理设计模式来实现一个额外的保护层，为接口提供安全性或懒初始化。 在允许用户访问敏感信息之前，我们希望确保用户具备足够的权限。操作系统中也存在类似的情况，用户必须具有管理员权限才能在系统中安装新程序。 关于此类的重要操作，除了安全之外还有延迟初始化：我们想要把一个计算成本较高的对象的创建过程延迟到用户首次真正使用它的时候才进行。 这类操作通常使用代理设计模式（Proxy design patt">
+<meta name="twitter:image" content="http://wx3.sinaimg.cn/mw690/ecff5bealy1fgdt7ontqtj20a9044q2v.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/11/python_proxy_pattern/"/>
+
+
+
+
+
+  <title> python代理模式-----结构型模式(6) | A Blog For Real </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Blog For Real</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Do one thing at a time, and do well.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/11/python_proxy_pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                python代理模式-----结构型模式(6)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T18:35:08+08:00">
+                2017-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
+                    <span itemprop="name">design_patterns</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>代理设计模式来实现一个额外的保护层，为接口提供安全性或懒初始化。</p>
+<p>在允许用户访问敏感信息之前，我们希望确保用户具备足够的权限。操作系统中也存在类似的情况，用户必须具有管理员权限才能在系统中安装新程序。</p>
+<p>关于此类的重要操作，除了安全之外还有延迟初始化：我们想要把一个计算成本较高的对象的创建过程延迟到用户首次真正使用它的时候才进行。</p>
+<p>这类操作通常使用代理设计模式（Proxy design pattern）来实现。该模式因使用代理对象在访问实际对象之前执行重要操作而得名。以下是4种不同的知名代理类型：</p>
+<ul>
+<li>远程代理：实际存在于不同地址空间（例如，某个网络服务器）的对象在本地的代理者。</li>
+<li>虚拟代理：用于懒初始化，将一个大计算量的对象的创建延迟到真正需要的时候进行。</li>
+<li>保护/防护代理：控制对敏感对象的访问。</li>
+<li>智能（引用）代理：在对象被访问时执行额外的动作。此类代理的例子包括引用计数和线程安全检查。</li>
+</ul>
+<p>本章将会学习如何创建虚拟代理。</p>
+<h3 id="虚拟代理例子"><a href="#虚拟代理例子" class="headerlink" title="虚拟代理例子"></a>虚拟代理例子</h3><p>使用地道的python风格实现。先创建一个LazyProperty类，用作一个修饰器。当它修饰某个特性时，LazyProperty惰性地（首次使用时）加载特性，而不是立即进行。<strong>init</strong>方法创建两个变量，method变量是一个实际方法的别名，method_name变量是该方法名称的别名。</p>
+<p>为更好理解如何使用这两个别名，可以将其值输出到标准输出（取消注释下面代码中的两个注释行）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LazyProperty</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    decorator/ descriptor to override __get__</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, method)</span>:</span></div><div class="line">        self.method = method</div><div class="line">        self.method_name = method.__name__</div><div class="line">        <span class="comment"># print('function overriden:&#123;&#125;'.format(self.fget))</span></div><div class="line">        <span class="comment"># print("function's name: &#123;&#125;".format(self.fuc_name))</span></div></pre></td></tr></table></figure>
+<p>LazyProperty实际上是一个描述符(descripter),描述符是Python中重写类属性<strong>访问方法</strong>（<strong>get</strong>(), <strong>set</strong>(), <strong>delete</strong>()）的默认行为要使用的一种推荐机制。LazyProperty类仅仅重写了<strong>get</strong>()，因为这是其需要重写的唯一访问方法。换句话说，我们无需重写所有的访问方法。<strong>get</strong>()方法所访问的特性值，正是下层方法想要赋的值，并使用setatr()来手动赋值。<strong>get</strong>()方法做的事就是，使用值来替代方法。这意味着，不仅特性是惰性加载的，而且仅可以设置一次。同样，取消注释以下代码的注释行，以得到一些额外的信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, obj, cls)</span>:</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> obj:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    value = self.method(obj)</div><div class="line">    <span class="comment"># print('value &#123;&#125;'.format(value))</span></div><div class="line">    setattr(obj, self.method_name, value)</div><div class="line">    <span class="keyword">return</span> value</div></pre></td></tr></table></figure>
+<p>Test类演示了我们可以如何使用LazyProperty类。其中有三个属性，x, y和_resource。我们想懒加载_resource变量，所以先将其初始化为None:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sample</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    for test</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.x = <span class="string">'foo'</span></div><div class="line">        self.y = <span class="string">'bar'</span></div><div class="line">        self._resource = <span class="keyword">None</span></div></pre></td></tr></table></figure>
+<p>resource()方法是使用LazyProperty类修饰的。因演示目的，LazyProperty类将_resource属性初始化为一个tuple.通常来说这是一个缓慢/代价大的初始化过程（初始化数据库、图形等）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@LazyProperty</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">resource</span><span class="params">(self)</span>:</span></div><div class="line">    print(<span class="string">'initializing self._resource which is: &#123;&#125;'</span>.format(self._resource))</div><div class="line">    self._resource = tuple(range(<span class="number">5</span>)) <span class="comment"># 假设这一行计算成本比较大</span></div><div class="line">    <span class="keyword">return</span> self._resource</div></pre></td></tr></table></figure>
+<p>main函数展示了懒初始化是如何进行的。注意，<strong>get</strong>()访问方法的重写使得可以将resource()方法当作一个变量（可以使用t.resource替代t.resource()）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    t = Sample()</div><div class="line">    print(t.x)</div><div class="line">    print(t.y)</div><div class="line">    <span class="comment"># do more things</span></div><div class="line">    print(t.resource)</div><div class="line">    print(t.resource)</div></pre></td></tr></table></figure>
+<p>在这个例子中（lazy.py）的执行输出中，可以看出以下几点：</p>
+<ul>
+<li>_resource变量实际不是在t实例创建时初始化的，而是在我们首次使用t.resource时；</li>
+<li>第二次使用t.resource之时，并没有再次初始化变量。这就是为什么初始化字符串initializing self._resource which is: 仅出现一次的原因。</li>
+</ul>
+<p>执行结果：</p>
+<p><img src="http://wx3.sinaimg.cn/mw690/ecff5bealy1fgdt7ontqtj20a9044q2v.jpg" alt=""></p>
+<p>在OOP中两个基本的、不同类型的懒初始化，如下所示：</p>
+<ul>
+<li>在实例级：这意味着对一个对象的特性进行懒初始化，但该特性有一个对象的作用域。同一个类的实例（对象）都有自己的（不同的）特性副本。</li>
+<li>在类级或模块级：在这种情况下，我们不希望每个实例都有一个不同的特性副本，而是所有实例共享同一个特性，而特性是懒初始化的，这一情况在本章不涉及。</li>
+</ul>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="现实生活中的例子"><a href="#现实生活中的例子" class="headerlink" title="现实生活中的例子"></a>现实生活中的例子</h4><p>芯片（又名芯片密码）卡是现实生活中使用防护代理的一个好例子。借记卡/信用卡包含一个芯片，ATM机或读卡器需要先读取芯片；在芯片通过验证后，需要一个密码（pin）才能完成交易。这意味着只有在物理地址提供芯片卡并且知道密码时才能进行交易。</p>
+<p>使用银行支票代替现金进行购买和交易是远程代理的一个例子。支票准许了对一个银行账户的访问。</p>
+<h4 id="软件的例子"><a href="#软件的例子" class="headerlink" title="软件的例子"></a>软件的例子</h4><p>python的weakref模块包含一个proxy()方法，该方法接受一个输入对象并将一个智能代理返回给对象。弱引用是为对象添加引用计数支持的一种推荐方式。</p>
+<p>ZeroMQ是一组专注于分布式计算的自由开源软件项目。ZeroMQ的python实现有一个代理模块，实现了一个远程代理。该模块允许Tornado的处理程序在不同的远程进程中运行。</p>
+<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>因为存在至少四种常见的代理类型，所以代理设计模式有很多应用案例，如下：</p>
+<ul>
+<li>在使用私有网络或云搭建一个分布式系统时。在分布式系统中，一些对象存在于本地内存中，一些对象存在于远程计算机的内存中，如果我们不想本地代码关心两者之间的区别，那么可以创建一个远程代理来隐藏/封装，使得应用的分布式性质透明化。</li>
+<li>因过早创建计算成本较高的对象导致应用遭受性能问题之时。使用虚拟代理引入懒初始化，仅在真正需要对象的时候创建，能够明显提高性能。</li>
+<li>用于检查一个用户是否有足够权限来访问某个信息片段。如果应用要处理敏感信息（例如，医疗数据），我们会希望确保用户在被准许之后才能访问/修改数据。一个保护/防护代理可以处理所有安全相关的行为。</li>
+<li>应用（或库、工具集、框架等）使用多线程，而我们希望把线程安全的重任从客户端代码迁移到应用。这种情况下，可以创建一个智能代理，对客户端隐藏县城安全的复杂性。</li>
+<li>对象关系映射（Object-Relatinal Mapping, ORM）API也是一个如何使用远程代理的例子。包括Django在内的许多流行Web框架使用一个ORM来提供类OOP的关系型数据库访问。ORM是关系型数据库的代理，数据库可以部署在任何地方，本地和远程服务器都可以。</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>为了演示代理模式，我们将实现一个简单的保护代理来查看和添加用户。该服务提供以下两个选项。</p>
+<ul>
+<li>查看用户列表：这一操作不要求特殊权限。</li>
+<li>添加新用户：这一操作要求客户端提供一个特殊的密码。</li>
+</ul>
+<p>SensitiveInfo类包含要保护的信息。users变量是已有用户的列表。read()方法输出用户列表。add()方法将一个新用户添加到列表中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SensitiveInfo</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    store information</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.users = [<span class="string">'nick'</span>, <span class="string">'tom'</span>, <span class="string">'ben'</span>, <span class="string">'mike'</span>]</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(self)</span>:</span></div><div class="line">        print(<span class="string">'There are &#123;&#125; users: &#123;&#125;'</span>.format(len(self.users), <span class="string">' '</span>.join(self.users)))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, user)</span>:</span></div><div class="line">        self.users.append(user)</div><div class="line">        print(<span class="string">'Added user &#123;&#125;'</span>.format(user))</div></pre></td></tr></table></figure>
+<p>Info类是SensitiveInfo的一个保护代理。secret变量值是客户端代码在添加新用户被要求提供的密码。注意，这里只是一个例子，在现实生活中，永远不要执行以下操作：</p>
+<ul>
+<li>在源代码中存储密码</li>
+<li>以明文形式存储密码</li>
+<li>使用一种弱（例如，MD5）或自定义加密形式</li>
+</ul>
+<p>read()方法是SensetiveInfo.read()的一个包装。add()方法确保仅当客户端代码知道密码时才能添加新用户。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Info</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    protected proxy for SensitiveInfo</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.protected = SensitiveInfo()</div><div class="line">        self.secret = <span class="string">'i am password!'</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(self)</span>:</span></div><div class="line">        self.protected.read()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, user)</span>:</span></div><div class="line">        sec = input(<span class="string">'what is the secret?'</span>)</div><div class="line">        self.protected.add(user) <span class="keyword">if</span> sec == self.secret <span class="keyword">else</span> print(<span class="string">"That's wrong!"</span>)</div></pre></td></tr></table></figure>
+<p>主函数展示了客户端代码可以如何实现代理模式。客户端代码创建一个Info类的实例，并使用菜单让用户选择来读取列表、添加新用户或退出应用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    info = Info()</div><div class="line"></div><div class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">        print(<span class="string">'1. read list | 2. add user | 3. quit'</span>)</div><div class="line">        key = input(<span class="string">'choose option: '</span>)</div><div class="line">        <span class="keyword">if</span> key == <span class="string">'1'</span>:</div><div class="line">            info.read()</div><div class="line">        <span class="keyword">elif</span> key == <span class="string">'2'</span>:</div><div class="line">            name = input(<span class="string">'input name: '</span>)</div><div class="line">            info.add(name)</div><div class="line">        <span class="keyword">elif</span> key == <span class="string">'3'</span>:</div><div class="line">            exit()</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            print(<span class="string">'unknown option: &#123;&#125;'</span>.format(key))</div></pre></td></tr></table></figure>
+<p>详细代码见github <a href="https://github.com/Edward1Chou/design_pattern_in_python/tree/master/proxy_pattern" target="_blank" rel="external">proxy design pattern</a></p>
+<p>从第十章开始，我们将接触行为型设计模式。行为型模式处理对象互联和算法的问题。涉及的第一个行为模式是责任链，我们可以创建一个接受对象的链，从而发送广播消息。在无法预知一个请求的处理程序时，发送广播消息是非常有用的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/11/python_chain_responsibility_pattern/" rel="next" title="python责任链模式-----行为型模式(1)">
+                <i class="fa fa-chevron-left"></i> python责任链模式-----行为型模式(1)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/11/python_mvc_pattern/" rel="prev" title="python模型-视图-控制器模式-----结构型模式(5)">
+                python模型-视图-控制器模式-----结构型模式(5) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
+               alt="Edward Chou" />
+          <p class="site-author-name" itemprop="name">Edward Chou</p>
+           
+              <p class="site-description motion-element" itemprop="description">pattern recognition and machine learning</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Edward1Chou" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟代理例子"><span class="nav-number">2.</span> <span class="nav-text">虚拟代理例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">3.</span> <span class="nav-text">例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#现实生活中的例子"><span class="nav-number">3.1.</span> <span class="nav-text">现实生活中的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软件的例子"><span class="nav-number">3.2.</span> <span class="nav-text">软件的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">4.</span> <span class="nav-text">应用案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">5.</span> <span class="nav-text">实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward Chou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
