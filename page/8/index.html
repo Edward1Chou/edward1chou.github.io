@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="design_patterns,python," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -87,17 +87,15 @@
 
 
 
-<meta name="description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
-<meta name="keywords" content="design_patterns,python">
-<meta property="og:type" content="article">
-<meta property="og:title" content="python解释器模式-----行为型模式(3)">
-<meta property="og:url" content="http://yoursite.com/2017/06/11/python_interpreter_pattern/index.html">
+<meta name="description" content="pattern recognition and machine learning">
+<meta property="og:type" content="website">
+<meta property="og:title" content="A Blog For Real">
+<meta property="og:url" content="http://yoursite.com/page/8/index.html">
 <meta property="og:site_name" content="A Blog For Real">
-<meta property="og:description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
-<meta property="og:updated_time" content="2017-06-11T10:38:57.006Z">
+<meta property="og:description" content="pattern recognition and machine learning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python解释器模式-----行为型模式(3)">
-<meta name="twitter:description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
+<meta name="twitter:title" content="A Blog For Real">
+<meta name="twitter:description" content="pattern recognition and machine learning">
 
 
 
@@ -125,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/11/python_interpreter_pattern/"/>
+  <link rel="canonical" href="http://yoursite.com/page/8/"/>
 
 
 
 
 
-  <title> python解释器模式-----行为型模式(3) | A Blog For Real </title>
+  <title> A Blog For Real </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -156,7 +154,9 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -259,9 +259,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -270,7 +270,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/11/python_interpreter_pattern/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/18/bias_var/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Edward Chou">
@@ -291,7 +291,10 @@
             
             
               
-                python解释器模式-----行为型模式(3)
+                
+                <a class="post-title-link" href="/2017/05/18/bias_var/" itemprop="url">
+                  偏差-方差 与 泛化误差
+                </a>
               
             
           </h1>
@@ -306,8 +309,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T18:38:57+08:00">
-                2017-06-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-18T20:20:56+08:00">
+                2017-05-18
               </time>
             
 
@@ -329,8 +332,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
-                    <span itemprop="name">design_patterns</span>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine_learning</span>
                   </a>
                 </span>
 
@@ -364,105 +367,185 @@
       
 
       
-        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL）</p>
-<p>对每个应用来说，至少有以下两种不同的用户分类：</p>
-<ul>
-<li>基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了；</li>
-<li>高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能得到以下好处，他们甚至会学习一种配置（或脚本）语言。</li>
-</ul>
-<ol>
-<li>能够更好地控制一个应用</li>
-<li>以更好的方式表达</li>
-<li>提高生产力</li>
-</ol>
-<p>解释器（Interpreter）模式能引起应用的高级用户的兴趣。这是因为解释器模式的思想是让非初级用户和领域专家使用一门简单的语言（没编程语言那么复杂的语言）来表达思想。</p>
-<p>一般而言，我们想要创建的是一个领域特定语言（Domain Specific Language, DSL）。DSL是一种针对一个特点领域有限表达能力的计算机语言。</p>
-<p>很多事情都使用DSL：战斗模拟、记账、可视化、配置、通信协议等。</p>
-<p>DSL分为内部DSL和外部DSL：</p>
-<ul>
-<li>内部DSL：建在一种宿主编程语言之上。例子是使用python解决线性方程组的一种语言。使用内部DSL的优势是我们不必担心创建、编译及解析语法，因为这些已经被宿主语言解决了。劣势是会受限于宿主语言的特性。</li>
-<li>外部DSL：不依赖于某种宿主语言。DSL的创建者可以决定语言的方方面面（语法、句法等），但为负责为其创建一个解析器和编译器。该过程比较痛苦。</li>
-</ul>
-<p>解释器模式仅与内部DSL相关。我们的目标是使用宿主语言提供的特性构建一种简单但有用的语言，在这里，宿主语言是Python。假设我们已经有某种便利形式的解析好的数据，可以是<strong>抽象语法树</strong>（abstract syntax tree, AST）或任何其他好用的数据结构。</p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="现实生活中的例子"><a href="#现实生活中的例子" class="headerlink" title="现实生活中的例子"></a>现实生活中的例子</h4><p>在某种意义上，五线谱是音乐的语言，音乐演奏者是这种语言的解释器。</p>
-<h4 id="软件的例子"><a href="#软件的例子" class="headerlink" title="软件的例子"></a>软件的例子</h4><p>PyT是一个用于生成(X)HTML的python DSL.</p>
-<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>在我们希望为领域专家和高级用户提供一种简单语言来解决他们的问题时，可以使用解释器模式。如果语言具有外部DSL那样的要求，有更好的工具（yacc和lex, Bison, ANTLR等）来从头创建一种语言。</p>
-<p>DSL应该是好理解的，不涉及python的高级特性的。此外，DSL的性能通常不是一个重要的关注点。重点是提供一种语言，隐藏宿主语言的独特性，并提供人类更易读的语法。诚然，python已经是一门可读性非常高的语言，与其他编程语言相比，其古怪的语法更少。</p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>使用python的工具：pyparsing</p>
-<p>第13章将演示观察者模式。观察者模式用于在两个或多个对象之间创建一个发布-订阅通信类型。</p>
-
+        
+          
+          偏差（bias）度量了学习算法的期望预测与真实结果的偏离程度，即刻画了学习算法本身的拟合能力
+方差（variance）度量了同样大小训练集的变动所导致的学习性能的变化，即刻画了数据扰动所造成的影响
+噪声（noise）表达了在当前任务上任何学习算法所能达到的期望泛化误差的下界，即刻画了学习问题本身的难
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/05/18/bias_var/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
 
     <div>
       
-        
-
-      
     </div>
 
     <div>
       
-        
-
-      
     </div>
 
     <div>
-      
-        
-
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
-          
-            <a href="/tags/python/" rel="tag"># python</a>
-          
-        </div>
+
       
 
       
-        
-      
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/06/11/python_observer_pattern/" rel="next" title="python观察者模式-----行为型模式(4)">
-                <i class="fa fa-chevron-left"></i> python观察者模式-----行为型模式(4)
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/11/python_command_pattern/" rel="prev" title="python命令模式-----行为型模式(2)">
-                python命令模式-----行为型模式(2) <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
+    
+      
 
-    <div class="post-spread">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/09/hello-world/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Edward Chou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Blog For Real">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/09/hello-world/" itemprop="url">
+                  Hello World
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-09T15:51:11+08:00">
+                2017-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/09/hello-world/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
-  </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+  </nav>
+
 
 
           </div>
@@ -470,10 +553,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-  </div>
-
 
         </div>
         
@@ -493,17 +572,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://wx2.sinaimg.cn/mw690/ecff5bealy1ffcvlq0iywj20ow0owwf8.jpg"
@@ -576,22 +646,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">2.</span> <span class="nav-text">例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#现实生活中的例子"><span class="nav-number">2.1.</span> <span class="nav-text">现实生活中的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软件的例子"><span class="nav-number">2.2.</span> <span class="nav-text">软件的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">3.</span> <span class="nav-text">应用案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -706,10 +760,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
 
   
 

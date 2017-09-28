@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="design_patterns,python," />
+  <meta name="keywords" content="dscene_recognization,paper," />
 
 
 
@@ -87,17 +87,24 @@
 
 
 
-<meta name="description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
-<meta name="keywords" content="design_patterns,python">
+<meta name="description" content="阅读了Bavin Ondieki的论文《Convolutional Neural Networks for Scene Recognition》 摘要数据集：Indoor67和SUN397目的：  为了适应工业化需求，CNN应用到场景分类时的最快速度 实验fool the CNN等技术 对比相同的CNN架构，在indoor-centirc和outdoor-centric数据集上的区别  技术方法场">
+<meta name="keywords" content="dscene_recognization,paper">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python解释器模式-----行为型模式(3)">
-<meta property="og:url" content="http://yoursite.com/2017/06/11/python_interpreter_pattern/index.html">
+<meta property="og:title" content="场景分类（2）">
+<meta property="og:url" content="http://yoursite.com/2017/09/28/scene_recognization2/index.html">
 <meta property="og:site_name" content="A Blog For Real">
-<meta property="og:description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
-<meta property="og:updated_time" content="2017-06-11T10:38:57.006Z">
+<meta property="og:description" content="阅读了Bavin Ondieki的论文《Convolutional Neural Networks for Scene Recognition》 摘要数据集：Indoor67和SUN397目的：  为了适应工业化需求，CNN应用到场景分类时的最快速度 实验fool the CNN等技术 对比相同的CNN架构，在indoor-centirc和outdoor-centric数据集上的区别  技术方法场">
+<meta property="og:image" content="https://wx4.sinaimg.cn/mw690/ecff5bealy1fjwwydoomjj20df02kjrg.jpg">
+<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjwxrg28ykj20dh02nmx8.jpg">
+<meta property="og:image" content="https://wx2.sinaimg.cn/mw690/ecff5bealy1fjwyt4vdhyj20cj02i74a.jpg">
+<meta property="og:image" content="https://wx4.sinaimg.cn/mw690/ecff5bealy1fjwz173zofj20d704nwet.jpg">
+<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjwzz8ojn2j20cw0b274k.jpg">
+<meta property="og:image" content="https://wx2.sinaimg.cn/mw690/ecff5bealy1fjx02v0sw4j20dl0anjsz.jpg">
+<meta property="og:updated_time" content="2017-09-28T05:50:36.589Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python解释器模式-----行为型模式(3)">
-<meta name="twitter:description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
+<meta name="twitter:title" content="场景分类（2）">
+<meta name="twitter:description" content="阅读了Bavin Ondieki的论文《Convolutional Neural Networks for Scene Recognition》 摘要数据集：Indoor67和SUN397目的：  为了适应工业化需求，CNN应用到场景分类时的最快速度 实验fool the CNN等技术 对比相同的CNN架构，在indoor-centirc和outdoor-centric数据集上的区别  技术方法场">
+<meta name="twitter:image" content="https://wx4.sinaimg.cn/mw690/ecff5bealy1fjwwydoomjj20df02kjrg.jpg">
 
 
 
@@ -125,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/11/python_interpreter_pattern/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/28/scene_recognization2/"/>
 
 
 
 
 
-  <title> python解释器模式-----行为型模式(3) | A Blog For Real </title>
+  <title> 场景分类（2） | A Blog For Real </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -270,7 +277,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/11/python_interpreter_pattern/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/28/scene_recognization2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Edward Chou">
@@ -291,7 +298,7 @@
             
             
               
-                python解释器模式-----行为型模式(3)
+                场景分类（2）
               
             
           </h1>
@@ -306,8 +313,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T18:38:57+08:00">
-                2017-06-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T13:50:36+08:00">
+                2017-09-28
               </time>
             
 
@@ -329,8 +336,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
-                    <span itemprop="name">design_patterns</span>
+                  <a href="/categories/scene-recognization/" itemprop="url" rel="index">
+                    <span itemprop="name">scene_recognization</span>
                   </a>
                 </span>
 
@@ -364,32 +371,70 @@
       
 
       
-        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL）</p>
-<p>对每个应用来说，至少有以下两种不同的用户分类：</p>
+        <p>阅读了Bavin Ondieki的论文《Convolutional Neural Networks for Scene Recognition》</p>
+<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>数据集：Indoor67和SUN397<br>目的：</p>
 <ul>
-<li>基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了；</li>
-<li>高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能得到以下好处，他们甚至会学习一种配置（或脚本）语言。</li>
+<li>为了适应工业化需求，CNN应用到场景分类时的最快速度</li>
+<li>实验fool the CNN等技术</li>
+<li>对比相同的CNN架构，在indoor-centirc和outdoor-centric数据集上的区别</li>
 </ul>
+<h3 id="技术方法"><a href="#技术方法" class="headerlink" title="技术方法"></a>技术方法</h3><p>场景分类问题可以用两种方法来处理：</p>
 <ol>
-<li>能够更好地控制一个应用</li>
-<li>以更好的方式表达</li>
-<li>提高生产力</li>
+<li>基于目标为中心的数据集进行CNN网络训练</li>
 </ol>
-<p>解释器（Interpreter）模式能引起应用的高级用户的兴趣。这是因为解释器模式的思想是让非初级用户和领域专家使用一门简单的语言（没编程语言那么复杂的语言）来表达思想。</p>
-<p>一般而言，我们想要创建的是一个领域特定语言（Domain Specific Language, DSL）。DSL是一种针对一个特点领域有限表达能力的计算机语言。</p>
-<p>很多事情都使用DSL：战斗模拟、记账、可视化、配置、通信协议等。</p>
-<p>DSL分为内部DSL和外部DSL：</p>
-<ul>
-<li>内部DSL：建在一种宿主编程语言之上。例子是使用python解决线性方程组的一种语言。使用内部DSL的优势是我们不必担心创建、编译及解析语法，因为这些已经被宿主语言解决了。劣势是会受限于宿主语言的特性。</li>
-<li>外部DSL：不依赖于某种宿主语言。DSL的创建者可以决定语言的方方面面（语法、句法等），但为负责为其创建一个解析器和编译器。该过程比较痛苦。</li>
+<p>一个场景中包含多个目标，场景识别的难度和多目标识别任务一样困难。</p>
+<ol>
+<li>基于场景为中心的数据集进行CNN网络训练</li>
+</ol>
+<p>这个方法和之前论文里面说的Places数据集进行训练是一样的。Bavin认为在本文中他想要证明周博磊的工作，用户外场景数据集训练出来的网络只要fine-tuning就可以很好的应用于室内场景识别，可以有效减少训练时间。</p>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><p><img src="https://wx4.sinaimg.cn/mw690/ecff5bealy1fjwwydoomjj20df02kjrg.jpg" alt=""></p>
+<h4 id="场景识别CNN"><a href="#场景识别CNN" class="headerlink" title="场景识别CNN"></a>场景识别CNN</h4><ul>
+<li>权重分配通过降低学习参数的数量来提高效率</li>
+<li>CNN采用空间局部相关</li>
 </ul>
-<p>解释器模式仅与内部DSL相关。我们的目标是使用宿主语言提供的特性构建一种简单但有用的语言，在这里，宿主语言是Python。假设我们已经有某种便利形式的解析好的数据，可以是<strong>抽象语法树</strong>（abstract syntax tree, AST）或任何其他好用的数据结构。</p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="现实生活中的例子"><a href="#现实生活中的例子" class="headerlink" title="现实生活中的例子"></a>现实生活中的例子</h4><p>在某种意义上，五线谱是音乐的语言，音乐演奏者是这种语言的解释器。</p>
-<h4 id="软件的例子"><a href="#软件的例子" class="headerlink" title="软件的例子"></a>软件的例子</h4><p>PyT是一个用于生成(X)HTML的python DSL.</p>
-<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>在我们希望为领域专家和高级用户提供一种简单语言来解决他们的问题时，可以使用解释器模式。如果语言具有外部DSL那样的要求，有更好的工具（yacc和lex, Bison, ANTLR等）来从头创建一种语言。</p>
-<p>DSL应该是好理解的，不涉及python的高级特性的。此外，DSL的性能通常不是一个重要的关注点。重点是提供一种语言，隐藏宿主语言的独特性，并提供人类更易读的语法。诚然，python已经是一门可读性非常高的语言，与其他编程语言相比，其古怪的语法更少。</p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>使用python的工具：pyparsing</p>
-<p>第13章将演示观察者模式。观察者模式用于在两个或多个对象之间创建一个发布-订阅通信类型。</p>
+<h3 id="数据理解的监督学习方法"><a href="#数据理解的监督学习方法" class="headerlink" title="数据理解的监督学习方法"></a>数据理解的监督学习方法</h3><ul>
+<li>KNN，随机森林， SVM这些简单的监督学习对于场景分类的准确率只有20%，并没有利用图像的空间局部相关</li>
+<li>使用随机森林方法得到特征重要性</li>
+</ul>
+<h3 id="分类流水线"><a href="#分类流水线" class="headerlink" title="分类流水线"></a>分类流水线</h3><p>The ﬁrst part of the classiﬁcation pipeline consisted of a two layer convolutional neural network, <strong>with dropout, max pooling for shift invariance, and ReLu to ensure that the network learns the weights well and the other layers - fully connected and inputlayers</strong>. </p>
+<p>训练大致步骤：</p>
+<ol>
+<li>resize all my images to 64x64</li>
+<li>two layer network（足够提取图像中的关键部分）</li>
+<li>training for about 16-20 epochs. </li>
+</ol>
+<h4 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a>实验结果</h4><p><img src="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjwxrg28ykj20dh02nmx8.jpg" alt=""></p>
+<h3 id="分析SUN397户外场景为中心数据集"><a href="#分析SUN397户外场景为中心数据集" class="headerlink" title="分析SUN397户外场景为中心数据集"></a>分析SUN397户外场景为中心数据集</h3><ul>
+<li>户外场景数据集比室内数据集相关性更小</li>
+<li>feature importances两类数据集类似</li>
+</ul>
+<h3 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h3><p>使用SUN397户外数据集预测室内数据集，至少减少初始化CNN的第一层权重。</p>
+<p>结果：</p>
+<p><img src="https://wx2.sinaimg.cn/mw690/ecff5bealy1fjwyt4vdhyj20cj02i74a.jpg" alt=""></p>
+<h4 id="室内室外场景的特征相似性"><a href="#室内室外场景的特征相似性" class="headerlink" title="室内室外场景的特征相似性"></a>室内室外场景的特征相似性</h4><p>步骤：</p>
+<ol>
+<li>从图像中提取出SIFT关键点</li>
+<li>使用随即森林获取SIFT关键点或特征在分类上的相关重要性</li>
+<li>有了这些主要特征后，使用cosine similarity 计算top20特征的相似度，计算方法如下图所示。</li>
+</ol>
+<p><img src="https://wx4.sinaimg.cn/mw690/ecff5bealy1fjwz173zofj20d704nwet.jpg" alt=""></p>
+<h4 id="室内场景识别难度和目标识别任务一样困难"><a href="#室内场景识别难度和目标识别任务一样困难" class="headerlink" title="室内场景识别难度和目标识别任务一样困难"></a>室内场景识别难度和目标识别任务一样困难</h4><p>室内场景进场被多簇相关特征化表示，经常是有很多噪声的。</p>
+<p>室内场景比室外场景更加复杂：</p>
+<p>要么太具体导致过拟合，要么太通用导致欠拟合。</p>
+<h4 id="理解SUN397数据集的混淆矩阵"><a href="#理解SUN397数据集的混淆矩阵" class="headerlink" title="理解SUN397数据集的混淆矩阵"></a>理解SUN397数据集的混淆矩阵</h4><p>当我们比较两个数据集中最混淆的两对分类的时候，室内场景要比室外混淆超过4倍。</p>
+<h3 id="CNN-fooling-gt-提升表现"><a href="#CNN-fooling-gt-提升表现" class="headerlink" title="CNN fooling -&gt; 提升表现"></a>CNN fooling -&gt; 提升表现</h3><p>利用CNN的漏洞fooling，以便最小化类间的混淆。</p>
+<p><strong>To do this, we ﬁnd the pair of classes that are most confused, and build a fooling image, with the mean image of the misclassiﬁed images as the start. In this case, we want to fool the CNN to boost and not break performance,hence the use of the term ’ethical’</strong></p>
+<p>从数据来看，bar和casino是最容易混淆的类</p>
+<p><img src="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjwzz8ojn2j20cw0b274k.jpg" alt=""></p>
+<p>从 Nguyen, Anh et.等人的论文来看，非常容易构建一副图像来混淆人工网络。</p>
+<p>大致方法，加噪声训练：</p>
+<p><strong>we add just enough noise to gain enough conﬁdence, not too little to produce little change, and not too much to visibly or excessively perturb the look of images.</strong></p>
+<p><img src="https://wx2.sinaimg.cn/mw690/ecff5bealy1fjx02v0sw4j20dl0anjsz.jpg" alt=""></p>
+<p>增加噪声后的效果：</p>
+<ul>
+<li>增加噪声后：46.40%准确率</li>
+<li>没有加噪声：42.80%准确率</li>
+</ul>
 
       
     </div>
@@ -419,9 +464,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
+            <a href="/tags/dscene-recognization/" rel="tag"># dscene_recognization</a>
           
-            <a href="/tags/python/" rel="tag"># python</a>
+            <a href="/tags/paper/" rel="tag"># paper</a>
           
         </div>
       
@@ -434,18 +479,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/11/python_observer_pattern/" rel="next" title="python观察者模式-----行为型模式(4)">
-                <i class="fa fa-chevron-left"></i> python观察者模式-----行为型模式(4)
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/06/11/python_command_pattern/" rel="prev" title="python命令模式-----行为型模式(2)">
-                python命令模式-----行为型模式(2) <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/28/scene_recognization1/" rel="prev" title="场景分类（1）">
+                场景分类（1） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -586,7 +627,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">2.</span> <span class="nav-text">例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#现实生活中的例子"><span class="nav-number">2.1.</span> <span class="nav-text">现实生活中的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软件的例子"><span class="nav-number">2.2.</span> <span class="nav-text">软件的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">3.</span> <span class="nav-text">应用案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技术方法"><span class="nav-number">2.</span> <span class="nav-text">技术方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果"><span class="nav-number">2.1.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#场景识别CNN"><span class="nav-number">2.2.</span> <span class="nav-text">场景识别CNN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据理解的监督学习方法"><span class="nav-number">3.</span> <span class="nav-text">数据理解的监督学习方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类流水线"><span class="nav-number">4.</span> <span class="nav-text">分类流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果-1"><span class="nav-number">4.1.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析SUN397户外场景为中心数据集"><span class="nav-number">5.</span> <span class="nav-text">分析SUN397户外场景为中心数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迁移学习"><span class="nav-number">6.</span> <span class="nav-text">迁移学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#室内室外场景的特征相似性"><span class="nav-number">6.1.</span> <span class="nav-text">室内室外场景的特征相似性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#室内场景识别难度和目标识别任务一样困难"><span class="nav-number">6.2.</span> <span class="nav-text">室内场景识别难度和目标识别任务一样困难</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解SUN397数据集的混淆矩阵"><span class="nav-number">6.3.</span> <span class="nav-text">理解SUN397数据集的混淆矩阵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN-fooling-gt-提升表现"><span class="nav-number">7.</span> <span class="nav-text">CNN fooling -> 提升表现</span></a></li></ol></div>
             
 
           </div>

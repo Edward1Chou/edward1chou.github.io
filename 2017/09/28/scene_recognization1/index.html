@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="design_patterns,python," />
+  <meta name="keywords" content="dscene_recognization,paper," />
 
 
 
@@ -87,17 +87,22 @@
 
 
 
-<meta name="description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
-<meta name="keywords" content="design_patterns,python">
+<meta name="description" content="阅读了MIT周博磊等人的论文《Places: A 10 million Image Database for Scene Recognition》,论文大致介绍了如下内容： 1.Introduction场景识别不同于现如今非常普遍的目标识别，场景识别的应用场景及重要性，场景识别的一个关键点就是根据场景中的相似物品来判断场景，本片论文的主要工作：  Places数据集的深度表示，评价几种最先进CNN">
+<meta name="keywords" content="dscene_recognization,paper">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python解释器模式-----行为型模式(3)">
-<meta property="og:url" content="http://yoursite.com/2017/06/11/python_interpreter_pattern/index.html">
+<meta property="og:title" content="场景分类（1）">
+<meta property="og:url" content="http://yoursite.com/2017/09/28/scene_recognization1/index.html">
 <meta property="og:site_name" content="A Blog For Real">
-<meta property="og:description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
-<meta property="og:updated_time" content="2017-06-11T10:38:57.006Z">
+<meta property="og:description" content="阅读了MIT周博磊等人的论文《Places: A 10 million Image Database for Scene Recognition》,论文大致介绍了如下内容： 1.Introduction场景识别不同于现如今非常普遍的目标识别，场景识别的应用场景及重要性，场景识别的一个关键点就是根据场景中的相似物品来判断场景，本片论文的主要工作：  Places数据集的深度表示，评价几种最先进CNN">
+<meta property="og:image" content="https://wx1.sinaimg.cn/mw690/ecff5bealy1fjtm3lt04uj20qr08k400.jpg">
+<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjtm4oma1jj20rb065gml.jpg">
+<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjtmmr9mftj20dk09mjsp.jpg">
+<meta property="og:image" content="https://wx4.sinaimg.cn/mw690/ecff5bealy1fjtmpexd70j20s609ndid.jpg">
+<meta property="og:updated_time" content="2017-09-28T03:34:35.049Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python解释器模式-----行为型模式(3)">
-<meta name="twitter:description" content="引言第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL） 对每个应用来说，至少有以下两种不同的用户分类：  基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了； 高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能">
+<meta name="twitter:title" content="场景分类（1）">
+<meta name="twitter:description" content="阅读了MIT周博磊等人的论文《Places: A 10 million Image Database for Scene Recognition》,论文大致介绍了如下内容： 1.Introduction场景识别不同于现如今非常普遍的目标识别，场景识别的应用场景及重要性，场景识别的一个关键点就是根据场景中的相似物品来判断场景，本片论文的主要工作：  Places数据集的深度表示，评价几种最先进CNN">
+<meta name="twitter:image" content="https://wx1.sinaimg.cn/mw690/ecff5bealy1fjtm3lt04uj20qr08k400.jpg">
 
 
 
@@ -125,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/11/python_interpreter_pattern/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/28/scene_recognization1/"/>
 
 
 
 
 
-  <title> python解释器模式-----行为型模式(3) | A Blog For Real </title>
+  <title> 场景分类（1） | A Blog For Real </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -270,7 +275,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/11/python_interpreter_pattern/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/28/scene_recognization1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Edward Chou">
@@ -291,7 +296,7 @@
             
             
               
-                python解释器模式-----行为型模式(3)
+                场景分类（1）
               
             
           </h1>
@@ -306,8 +311,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T18:38:57+08:00">
-                2017-06-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T11:34:35+08:00">
+                2017-09-28
               </time>
             
 
@@ -329,8 +334,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/design-patterns/" itemprop="url" rel="index">
-                    <span itemprop="name">design_patterns</span>
+                  <a href="/categories/scene-recognization/" itemprop="url" rel="index">
+                    <span itemprop="name">scene_recognization</span>
                   </a>
                 </span>
 
@@ -364,32 +369,51 @@
       
 
       
-        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>第12章我们将学习解释器模式，该模式用于创建一种专注于某个特定领域的计算机语言。这种语言称为领域特定语言（Domain Specific Language, DSL）</p>
-<p>对每个应用来说，至少有以下两种不同的用户分类：</p>
+        <p>阅读了MIT周博磊等人的论文《Places: A 10 million Image Database for Scene Recognition》,论文大致介绍了如下内容：</p>
+<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1.Introduction"></a>1.Introduction</h3><p>场景识别不同于现如今非常普遍的目标识别，场景识别的应用场景及重要性，场景识别的一个关键点就是根据场景中的相似物品来判断场景，本片论文的主要工作：</p>
 <ul>
-<li>基本用户：这类用户只希望能够凭直觉使用应用。他们不喜欢花太多时间配置或学习应用的内部。对于他们，基本的用法就足够了；</li>
-<li>高级用户：不介意额外花费时间学习应用的高级特性。如果学会了能得到以下好处，他们甚至会学习一种配置（或脚本）语言。</li>
+<li>Places数据集的深度表示，评价几种最先进CNN的场景识别效果</li>
+<li>比较从Places上学习到的特征用于其他视觉识别任务的范化能力</li>
+<li>最后，可视化CNN的内在表示，讨论目标检测器作为网络的中间展示层</li>
 </ul>
-<ol>
-<li>能够更好地控制一个应用</li>
-<li>以更好的方式表达</li>
-<li>提高生产力</li>
-</ol>
-<p>解释器（Interpreter）模式能引起应用的高级用户的兴趣。这是因为解释器模式的思想是让非初级用户和领域专家使用一门简单的语言（没编程语言那么复杂的语言）来表达思想。</p>
-<p>一般而言，我们想要创建的是一个领域特定语言（Domain Specific Language, DSL）。DSL是一种针对一个特点领域有限表达能力的计算机语言。</p>
-<p>很多事情都使用DSL：战斗模拟、记账、可视化、配置、通信协议等。</p>
-<p>DSL分为内部DSL和外部DSL：</p>
+<p>所以，虽然Place数据集并不存在目标标签或语义，它仍然是可以用于训练目标分类器的</p>
+<p>介绍多种超百万数据集的增多</p>
+<p>介绍之前以场景为中心的数据集</p>
+<h3 id="2-Places数据集"><a href="#2-Places数据集" class="headerlink" title="2.Places数据集"></a>2.Places数据集</h3><h4 id="覆盖的分类空间"><a href="#覆盖的分类空间" class="headerlink" title="覆盖的分类空间"></a>覆盖的分类空间</h4><p>根据SUN数据库提供的场景类表来进行覆盖分类</p>
+<h4 id="数据库的构建"><a href="#数据库的构建" class="headerlink" title="数据库的构建"></a>数据库的构建</h4><p>4步：</p>
 <ul>
-<li>内部DSL：建在一种宿主编程语言之上。例子是使用python解决线性方程组的一种语言。使用内部DSL的优势是我们不必担心创建、编译及解析语法，因为这些已经被宿主语言解决了。劣势是会受限于宿主语言的特性。</li>
-<li>外部DSL：不依赖于某种宿主语言。DSL的创建者可以决定语言的方方面面（语法、句法等），但为负责为其创建一个解析器和编译器。该过程比较痛苦。</li>
+<li>查询下载图片</li>
 </ul>
-<p>解释器模式仅与内部DSL相关。我们的目标是使用宿主语言提供的特性构建一种简单但有用的语言，在这里，宿主语言是Python。假设我们已经有某种便利形式的解析好的数据，可以是<strong>抽象语法树</strong>（abstract syntax tree, AST）或任何其他好用的数据结构。</p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="现实生活中的例子"><a href="#现实生活中的例子" class="headerlink" title="现实生活中的例子"></a>现实生活中的例子</h4><p>在某种意义上，五线谱是音乐的语言，音乐演奏者是这种语言的解释器。</p>
-<h4 id="软件的例子"><a href="#软件的例子" class="headerlink" title="软件的例子"></a>软件的例子</h4><p>PyT是一个用于生成(X)HTML的python DSL.</p>
-<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>在我们希望为领域专家和高级用户提供一种简单语言来解决他们的问题时，可以使用解释器模式。如果语言具有外部DSL那样的要求，有更好的工具（yacc和lex, Bison, ANTLR等）来从头创建一种语言。</p>
-<p>DSL应该是好理解的，不涉及python的高级特性的。此外，DSL的性能通常不是一个重要的关注点。重点是提供一种语言，隐藏宿主语言的独特性，并提供人类更易读的语法。诚然，python已经是一门可读性非常高的语言，与其他编程语言相比，其古怪的语法更少。</p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>使用python的工具：pyparsing</p>
-<p>第13章将演示观察者模式。观察者模式用于在两个或多个对象之间创建一个发布-订阅通信类型。</p>
+<p>通过搜索引擎+SUN数据库进行下载</p>
+<ul>
+<li>标记数据</li>
+</ul>
+<p>发布AMT任务</p>
+<ul>
+<li>使用分类器扩展数据集</li>
+</ul>
+<p>使用semi-automatic bootstrapping approach(半自动自举方法)</p>
+<ul>
+<li>改善类似类别的区分度</li>
+</ul>
+<p>归并同义词，AMT中设置更严格有效的标记策略</p>
+<h3 id="3-Places基准"><a href="#3-Places基准" class="headerlink" title="3.Places基准"></a>3.Places基准</h3><p>4个Places数据集的子集作为基准。Place205和Place88,Place365-Standard和Palce365-Challenge</p>
+<h3 id="4-比较场景中心数据集"><a href="#4-比较场景中心数据集" class="headerlink" title="4.比较场景中心数据集"></a>4.比较场景中心数据集</h3><ul>
+<li>数据集多样性</li>
+</ul>
+<p>describe a measure of dataset diversity<br>to compare how diverse images from three scene-centric<br>datasets (Places88, SUN88 and ImageNet88) are</p>
+<p>结论就是Places数据集在3个数据集中多样性是最丰富的。</p>
+<ul>
+<li>交叉数据集范化</li>
+</ul>
+<p>结论是Places数据集的交叉范化能力是3个数据集中最强的。</p>
+<h3 id="5-场景分类CNN"><a href="#5-场景分类CNN" class="headerlink" title="5.场景分类CNN"></a>5.场景分类CNN</h3><p>注：其中top5是指提供5个标签，其中有一个命中就行</p>
+<p><img src="https://wx1.sinaimg.cn/mw690/ecff5bealy1fjtm3lt04uj20qr08k400.jpg" alt=""></p>
+<p><img src="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjtm4oma1jj20rb065gml.jpg" alt=""></p>
+<p><strong>注意：其中会遇到一个问题，预测出的场景是正确的，但是是和label相近的词会造成预测偏差，这也是后续工作需要处理的一个问题，语义归并</strong></p>
+<p>各种方法在SUN397数据集上的分类准确率，如下图所示：</p>
+<p><img src="https://wx3.sinaimg.cn/mw690/ecff5bealy1fjtmmr9mftj20dk09mjsp.jpg" alt=""></p>
+<h3 id="6-结论"><a href="#6-结论" class="headerlink" title="6.结论"></a>6.结论</h3><p><img src="https://wx4.sinaimg.cn/mw690/ecff5bealy1fjtmpexd70j20s609ndid.jpg" alt=""></p>
 
       
     </div>
@@ -419,9 +443,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/design-patterns/" rel="tag"># design_patterns</a>
+            <a href="/tags/dscene-recognization/" rel="tag"># dscene_recognization</a>
           
-            <a href="/tags/python/" rel="tag"># python</a>
+            <a href="/tags/paper/" rel="tag"># paper</a>
           
         </div>
       
@@ -434,8 +458,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/11/python_observer_pattern/" rel="next" title="python观察者模式-----行为型模式(4)">
-                <i class="fa fa-chevron-left"></i> python观察者模式-----行为型模式(4)
+              <a href="/2017/09/28/scene_recognization2/" rel="next" title="场景分类（2）">
+                <i class="fa fa-chevron-left"></i> 场景分类（2）
               </a>
             
           </div>
@@ -444,8 +468,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/06/11/python_command_pattern/" rel="prev" title="python命令模式-----行为型模式(2)">
-                python命令模式-----行为型模式(2) <i class="fa fa-chevron-right"></i>
+              <a href="/2017/06/11/python_template_pattern/" rel="prev" title="python模板模式-----行为型模式(7)">
+                python模板模式-----行为型模式(7) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -586,7 +610,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">2.</span> <span class="nav-text">例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#现实生活中的例子"><span class="nav-number">2.1.</span> <span class="nav-text">现实生活中的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软件的例子"><span class="nav-number">2.2.</span> <span class="nav-text">软件的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用案例"><span class="nav-number">3.</span> <span class="nav-text">应用案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Introduction"><span class="nav-number">1.</span> <span class="nav-text">1.Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Places数据集"><span class="nav-number">2.</span> <span class="nav-text">2.Places数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖的分类空间"><span class="nav-number">2.1.</span> <span class="nav-text">覆盖的分类空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库的构建"><span class="nav-number">2.2.</span> <span class="nav-text">数据库的构建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Places基准"><span class="nav-number">3.</span> <span class="nav-text">3.Places基准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-比较场景中心数据集"><span class="nav-number">4.</span> <span class="nav-text">4.比较场景中心数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-场景分类CNN"><span class="nav-number">5.</span> <span class="nav-text">5.场景分类CNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-结论"><span class="nav-number">6.</span> <span class="nav-text">6.结论</span></a></li></ol></div>
             
 
           </div>
